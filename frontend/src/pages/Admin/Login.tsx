@@ -43,7 +43,7 @@ export default function AdminLogin() {
             formData.append("username", values.username);
             formData.append("password", values.password);
 
-            const API_URL = import.meta.env.VITE_API_URL;
+            const API_URL = import.meta.env.VITE_API_BASE_URL;
             if (!API_URL) {
                 toast.error("API URL not configured");
                 setIsLoading(false);

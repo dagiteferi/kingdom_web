@@ -37,7 +37,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         output: {
           manualChunks: {
             react: ['react', 'react-dom', 'react-router-dom'],
-            vendor: ['lodash', 'axios', 'zod', 'react-hook-form'],
+            vendor: ['zod', 'react-hook-form'],
           },
         },
       },
