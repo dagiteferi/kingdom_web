@@ -1,8 +1,9 @@
 import { toast } from "sonner";
 
 const rawApiUrl = import.meta.env.VITE_API_BASE_URL || "";
-// Sanitize the URL: remove leading '=' and trim spaces
-const API_URL = rawApiUrl.replace(/^=/, "").trim();
+// Robust sanitization: Find where http starts and strip everything before it
+const httpIndex = rawApiUrl.indexOf("http");
+const API_URL = httpIndex !== -1 ? rawApiUrl.substring(httpIndex).trim() : rawApiUrl.trim();
 
 if (!API_URL) {
     console.error("VITE_API_BASE_URL is not defined in environment variables");
