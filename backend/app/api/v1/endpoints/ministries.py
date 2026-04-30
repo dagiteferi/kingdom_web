@@ -85,7 +85,7 @@ async def create_new_ministry(
     current_admin: Annotated[Admin, Depends(get_current_active_admin)],
 ):
     """Create a new ministry (admin only)."""
-    existing = await get_ministry_by_key(db, ministry_key=ministry_in.key)
+    existing = await get_ministry_by_key(db, ministry_key=ministry_in.ministry_key)
     if existing:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
