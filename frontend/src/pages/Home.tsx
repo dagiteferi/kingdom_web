@@ -220,20 +220,28 @@ const Home = () => {
         </section>
 
         {/* Ministries Preview */}
-        <section className="section-container">
-          <div className="text-center mb-12">
+        <section className="section-container relative overflow-hidden bg-warm-white">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl -mr-48 -mt-48 opacity-60" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -ml-48 -mb-48 opacity-60" />
+          
+          <div className="text-center mb-16 relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <h2 className="section-title">{t('ministries.title')}</h2>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <div className="h-px w-8 bg-secondary" />
+                <span className="text-secondary font-bold tracking-widest uppercase text-sm">{t('nav.ministries')}</span>
+                <div className="h-px w-8 bg-secondary" />
+              </div>
+              <h2 className="section-title text-navy">{t('ministries.title')}</h2>
               <p className="section-subtitle">{t('ministries.subtitle')}</p>
             </motion.div>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 relative z-10 max-w-7xl mx-auto">
             {ministries.map((ministry, index) => {
               const MinistryIcon = iconMap[ministry.icon_name] || iconMap.Default;
               const title = i18n.language === 'am' && ministry.title_am ? ministry.title_am : ministry.title;
@@ -251,13 +259,14 @@ const Home = () => {
             })}
           </div>
 
-          <div className="text-center mt-10">
-            <Link to="/ministries" className="btn-navy inline-flex items-center gap-2">
+          <div className="text-center mt-16 relative z-10">
+            <Link to="/ministries" className="btn-navy group inline-flex items-center gap-3 py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
               {t('common.viewAll')}
-              <ArrowRight size={18} />
+              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </section>
+
 
         {/* Featured Events */}
         <section className="bg-primary py-16 md:py-20">
