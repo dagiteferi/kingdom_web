@@ -175,8 +175,13 @@
   }
 
   .bible-verse {
-    @apply text-lg md:text-xl text-navy font-serif leading-relaxed italic border-l-2 border-gold/40 pl-6 py-4 my-6 bg-gold/5 rounded-r-lg;
+    @apply text-xl md:text-2xl text-navy font-serif leading-relaxed italic border-l-4 border-secondary pl-8 py-6 my-8 bg-gradient-to-r from-secondary/10 to-transparent rounded-r-2xl relative shadow-sm;
     font-family: 'EB Garamond', serif;
+  }
+  
+  .bible-verse::after {
+    content: '"';
+    @apply absolute -bottom-4 right-4 text-6xl text-secondary/10 font-serif leading-none rotate-180;
   }
 
   .nav-link {

@@ -18,8 +18,8 @@ const MinistryCard = ({ title, description, icon: Icon, delay = 0 }: MinistryCar
     return parts.map((part, index) => {
       if (part.startsWith('"') && part.endsWith('"')) {
         return (
-          <div key={index} className="bible-verse text-base my-4 p-4">
-            <Quote className="w-5 h-5 text-secondary/30 mb-1" />
+          <div key={index} className="bible-verse">
+            <Quote className="w-6 h-6 text-secondary/40 mb-3" />
             {part}
           </div>
         );
