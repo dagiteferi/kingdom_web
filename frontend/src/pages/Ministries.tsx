@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Users, BookOpen, Calendar, HandHeart, Music, Baby, Globe, LucideIcon, Church, ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
+import { Heart, Users, BookOpen, Calendar, HandHeart, Music, Baby, Globe, LucideIcon, Church, ArrowRight, Sparkles, ChevronDown, Quote } from 'lucide-react';
 import { getMinistries, Ministry } from '@/services/api';
 import { toast } from 'sonner';
 import { getCache, setCache } from '@/lib/cache';
@@ -25,6 +25,22 @@ const Ministries = () => {
     Globe,
     Church,
     Default: Heart,
+  };
+
+  const renderDescription = (text: string) => {
+    if (!text) return null;
+    const parts = text.split(/("[^"]*")/);
+    return parts.map((part, index) => {
+      if (part.startsWith('"') && part.endsWith('"')) {
+        return (
+          <div key={index} className="bible-verse">
+            <Quote className="w-6 h-6 text-secondary/40 mb-3" />
+            {part}
+          </div>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
   };
 
   useEffect(() => {
@@ -123,12 +139,12 @@ const Ministries = () => {
                     {title}
                   </h3>
                   
-                  <p className={`text-muted-foreground text-lg leading-relaxed mb-6 transition-all duration-500 ${isExpanded ? '' : 'line-clamp-3'}`}>
-                    {description}
-                  </p>
+                  <div className={`text-muted-foreground text-lg leading-relaxed mb-6 transition-all duration-500 ${isExpanded ? '' : 'line-clamp-3'}`}>
+                    {isExpanded ? renderDescription(description) : description}
+                  </div>
 
                   <AnimatePresence>
-                    {isExpanded && activities.length > 0 && (
+                    {isExpanded && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
@@ -136,39 +152,57 @@ const Ministries = () => {
                         className="overflow-hidden"
                       >
                         <div className="pt-6 border-t border-border mt-6">
-                          <h4 className="text-navy font-bold mb-4 flex items-center gap-2">
-                            <Sparkles size={14} className="text-secondary" />
-                            {t('testimonial.categories.general')}
-                          </h4>
-                          <ul className="space-y-4">
-                            {activities.map((activity: string, i: number) => (
-                              <motion.li 
-                                key={i}
-                                initial={{ x: -10, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: i * 0.1 }}
-                                className="flex items-start gap-3 text-base text-muted-foreground"
-                              >
-                                <div className="w-2 h-2 bg-secondary rounded-full flex-shrink-0 mt-2.5" />
-                                <span>{activity}</span>
-                              </motion.li>
-                            ))}
-                          </ul>
+                          {ministry.leader_name && (
+                            <div className="mb-6 p-4 bg-secondary/5 rounded-2xl border border-secondary/20">
+                              <h4 className="text-navy font-bold text-sm uppercase tracking-wider mb-2 flex items-center gap-2">
+                                <Users size={16} className="text-secondary" />
+                                Ministry Leader
+                              </h4>
+                              <p className="text-navy text-lg font-medium">{ministry.leader_name}</p>
+                              {(ministry.leader_email || ministry.leader_phone) && (
+                                <div className="flex flex-wrap gap-4 mt-2 text-sm text-muted-foreground">
+                                  {ministry.leader_email && <span>{ministry.leader_email}</span>}
+                                  {ministry.leader_phone && <span>{ministry.leader_phone}</span>}
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {activities.length > 0 && (
+                            <>
+                              <h4 className="text-navy font-bold mb-4 flex items-center gap-2">
+                                <Sparkles size={14} className="text-secondary" />
+                                {t('testimonial.categories.general')}
+                              </h4>
+                              <ul className="space-y-4">
+                                {activities.map((activity: string, i: number) => (
+                                  <motion.li 
+                                    key={i}
+                                    initial={{ x: -10, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    transition={{ delay: i * 0.1 }}
+                                    className="flex items-start gap-3 text-base text-muted-foreground"
+                                  >
+                                    <div className="w-2 h-2 bg-secondary rounded-full flex-shrink-0 mt-2.5" />
+                                    <span>{activity}</span>
+                                  </motion.li>
+                                ))}
+                              </ul>
+                            </>
+                          )}
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
 
-                {activities.length > 0 && (
-                  <button
-                    onClick={() => toggleExpand(ministry.id)}
-                    className={`w-full p-6 flex items-center justify-between font-bold text-sm uppercase tracking-widest transition-all duration-300 ${isExpanded ? 'bg-secondary text-navy' : 'bg-muted/30 text-secondary hover:bg-secondary/10'}`}
-                  >
-                    <span>{isExpanded ? t('common.readLess') : t('common.readMore')}</span>
-                    <ChevronDown className={`transition-transform duration-500 ${isExpanded ? 'rotate-180' : ''}`} size={20} />
-                  </button>
-                )}
+                <button
+                  onClick={() => toggleExpand(ministry.id)}
+                  className={`w-full p-6 flex items-center justify-between font-bold text-sm uppercase tracking-widest transition-all duration-300 ${isExpanded ? 'bg-secondary text-navy' : 'bg-muted/30 text-secondary hover:bg-secondary/10'}`}
+                >
+                  <span>{isExpanded ? t('common.readLess') : t('common.readMore')}</span>
+                  <ChevronDown className={`transition-transform duration-500 ${isExpanded ? 'rotate-180' : ''}`} size={20} />
+                </button>
               </motion.div>
             );
           })}
