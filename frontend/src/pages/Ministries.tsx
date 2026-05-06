@@ -194,15 +194,14 @@ const Ministries = () => {
                       </motion.div>
                     )}
                   </AnimatePresence>
+                  <button
+                    onClick={() => toggleExpand(ministry.id)}
+                    className={`mt-8 flex items-center justify-between w-full py-4 px-6 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all duration-300 ${isExpanded ? 'bg-secondary text-navy shadow-gold-glow' : 'bg-secondary/10 text-secondary hover:bg-secondary/20'}`}
+                  >
+                    <span>{isExpanded ? t('common.readLess') : t('common.readMore')}</span>
+                    <ChevronDown className={`transition-transform duration-500 ${isExpanded ? 'rotate-180' : ''}`} size={18} />
+                  </button>
                 </div>
-
-                <button
-                  onClick={() => toggleExpand(ministry.id)}
-                  className={`w-full p-6 flex items-center justify-between font-bold text-sm uppercase tracking-widest transition-all duration-300 ${isExpanded ? 'bg-secondary text-navy' : 'bg-muted/30 text-secondary hover:bg-secondary/10'}`}
-                >
-                  <span>{isExpanded ? t('common.readLess') : t('common.readMore')}</span>
-                  <ChevronDown className={`transition-transform duration-500 ${isExpanded ? 'rotate-180' : ''}`} size={20} />
-                </button>
               </motion.div>
             );
           })}
