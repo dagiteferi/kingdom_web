@@ -95,7 +95,7 @@ const Gallery = () => {
                       : 'bg-muted hover:bg-muted/80'
                   }`}
                 >
-                  {category.label}
+                  {t(`gallery.categories.${category.id}`, category.label)}
                 </button>
               ))}
             </div>
