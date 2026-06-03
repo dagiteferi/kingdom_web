@@ -192,8 +192,8 @@
         "category": "provision"
       }
     },
-    "noTestimonialMessage": "No testimonies to display. Check back later!",
-    "ctaMessage": "God is doing amazing things in our community. Come and see for yourself!"
+    "noTestimonials": "No testimonies to display. Check back later!",
+    "ctaText": "God is doing amazing things in our community. Come and see for yourself!"
   },
   "aboutPage": {
     "hero": {
@@ -546,13 +546,14 @@
   "gallery": {
     "title": "Our Gallery",
     "subtitle": "Capturing moments of faith, worship, and community",
-    "categories": [
-      { "id": "all", "label": "All" },
-      { "id": "worship", "label": "Worship Services" },
-      { "id": "outreach", "label": "Community Outreach" },
-      { "id": "youth", "label": "Youth & Children" },
-      { "id": "events", "label": "Special Events" }
-    ],
+    "categories": {
+      "all": "All",
+      "worship": "Worship Services",
+      "outreach": "Community Outreach",
+      "youth": "Youth & Children",
+      "events": "Special Events",
+      "general": "General"
+    },
     "items": [
       {
         "id": 1,

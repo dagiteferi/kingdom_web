@@ -154,7 +154,9 @@
     "viewAllEvents": "ሁሉንም ዝግጅቶች ይመልከቱ"
   },
   "testimonial": {
-    "shareYourStory": "ታሪክዎን ያካፍሉ",
+    "sectionTitle": "የእምነት ምስክርነቶች",
+    "sectionSubtitle": "የእግዚአብሔር ታማኝነት በህይወታችን",
+    "shareYourStory": "ምስክርነትዎን ያካፍሉ",
     "category": "ምድብ",
     "categories": {
       "general": "አጠቃላይ",
@@ -169,7 +171,9 @@
     "minLength": "ቢያንስ {{count}} ቁምፊዎች",
     "submitButton": "ምስክርነትዎን ያስገቡ",
     "thankYou": "እናመሰግናለን!",
-    "submitSuccess": "ምስክርነትዎ በተሳካ ሁኔታ ገብቷል። በቅርቡ ታይቶ ይታተማል።"
+    "submitSuccess": "ምስክርነትዎ በተሳካ ሁኔታ ገብቷል። በቅርቡ ታይቶ ይታተማል።",
+    "noTestimonials": "የሚታይ ምስክርነት የለም። እባክዎ ቆየት ብለው ይመለሱ!",
+    "ctaText": "እግዚአብሔር በማህበረሰባችን ውስጥ አስደናቂ ነገሮችን እያደረገ ነው። መጥተው እራስዎ ይመልከቱ!"
   },
   "aboutPage": {
     "hero": {
@@ -542,13 +546,14 @@
   "gallery": {
     "title": "የእኛ ማዕከለ-ስዕላት",
     "subtitle": "የእምነት፣ የአምልኮ እና የማህበረሰብ ጊዜዎችን መቅረጽ",
-    "categories": [
-      { "id": "all", "label": "ሁሉም" },
-      { "id": "worship", "label": "የአምልኮ አገልግሎቶች" },
-      { "id": "outreach", "label": "የማህበረሰብ ተደራሽነት" },
-      { "id": "youth", "label": "ወጣቶች እና ልጆች" },
-      { "id": "events", "label": "ልዩ ዝግጅቶች" }
-    ],
+    "categories": {
+      "all": "ሁሉም",
+      "worship": "የአምልኮ አገልግሎቶች",
+      "outreach": "የማህበረሰብ ተደራሽነት",
+      "youth": "ወጣቶች እና ልጆች",
+      "events": "ልዩ ዝግጅቶች",
+      "general": "አጠቃላይ"
+    },
     "items": [
       {
         "id": 1,
