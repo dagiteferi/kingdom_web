@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LucideIcon, Sparkles, Quote, ChevronDown, ChevronUp } from 'lucide-react';
+import { LucideIcon, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface MinistryCardProps {
   title: string;
@@ -17,10 +17,23 @@ const MinistryCard = ({ title, description, icon: Icon, delay = 0 }: MinistryCar
     const parts = text.split(/("[^"]*")/);
     return parts.map((part, index) => {
       if (part.startsWith('"') && part.endsWith('"')) {
+        // Check if the next part has a bible reference (starts with — or -)
+        const nextPart = parts[index + 1];
+        let reference = '';
+        if (nextPart) {
+          const refMatch = nextPart.match(/^\s*[—–-]\s*(.+?)(?:\.|$)/);
+          if (refMatch) {
+            reference = refMatch[1].trim();
+            // Remove the reference from the next part so it doesn't render twice
+            parts[index + 1] = nextPart.replace(/^\s*[—–-]\s*.+?(?:\.|$)/, '');
+          }
+        }
         return (
           <div key={index} className="bible-verse">
-            <Quote className="w-6 h-6 text-secondary/40 mb-3" />
-            {part}
+            <span>{part}</span>
+            {reference && (
+              <span className="bible-verse-ref">— {reference}</span>
+            )}
           </div>
         );
       }

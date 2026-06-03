@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Users, BookOpen, Calendar, HandHeart, Music, Baby, Globe, LucideIcon, Church, ArrowRight, Sparkles, ChevronDown, Quote } from 'lucide-react';
+import { Heart, Users, BookOpen, Calendar, HandHeart, Music, Baby, Globe, LucideIcon, Church, ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
 import { getMinistries, Ministry } from '@/services/api';
 import { toast } from 'sonner';
 import { getCache, setCache } from '@/lib/cache';
@@ -32,10 +32,21 @@ const Ministries = () => {
     const parts = text.split(/("[^"]*")/);
     return parts.map((part, index) => {
       if (part.startsWith('"') && part.endsWith('"')) {
+        const nextPart = parts[index + 1];
+        let reference = '';
+        if (nextPart) {
+          const refMatch = nextPart.match(/^\s*[—–-]\s*(.+?)(?:\.|$)/);
+          if (refMatch) {
+            reference = refMatch[1].trim();
+            parts[index + 1] = nextPart.replace(/^\s*[—–-]\s*.+?(?:\.|$)/, '');
+          }
+        }
         return (
           <div key={index} className="bible-verse">
-            <Quote className="w-6 h-6 text-secondary/40 mb-3" />
-            {part}
+            <span>{part}</span>
+            {reference && (
+              <span className="bible-verse-ref">— {reference}</span>
+            )}
           </div>
         );
       }
