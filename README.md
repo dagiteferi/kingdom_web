@@ -44,7 +44,7 @@ This project is structured into two interconnected applications: a robust backen
 
 ### Backend: Content Management System (CMS)
 
-A powerful and secure Content Management System built with Python, designed to manage all ministry data.
+A powerful and secure Content Management System built with Python, designed to manage all ministry data. For detailed information on setup, features, and API endpoints, please refer to the [Backend README.md](./backend/README.md).
 
 *   **Framework:** [FastAPI](https://fastapi.tiangolo.com/) - A modern, fast (high-performance) web framework for building APIs with Python 3.7+ based on standard Python type hints.
 *   **Database:** [PostgreSQL](https://www.postgresql.org/) - A powerful, open-source object-relational database system.
@@ -54,7 +54,7 @@ A powerful and secure Content Management System built with Python, designed to m
 
 ### Frontend: Interactive Web Interface
 
-A fast, responsive, and interactive user interface that brings the ministry's content to life.
+A fast, responsive, and interactive user interface that brings the ministry's content to life. For detailed information on setup, features, and development, please refer to the [Frontend README.md](./frontend/README.md).
 
 *   **Framework:** [React](https://react.dev/) with [Vite](https://vitejs.dev/) - A modern build tool that provides a faster and leaner development experience for web projects.
 *   **Styling:** [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework for rapidly building custom designs.
@@ -63,30 +63,18 @@ A fast, responsive, and interactive user interface that brings the ministry's co
 *   **State Management/Data Fetching:** [React Query](https://tanstack.com/query/latest) - For powerful asynchronous state management.
 *   **Internationalization:** [i18next](https://www.i18next.com/) - For seamless bilingual support (English and Amharic).
 
+## Live Application
+
+Experience the Heaven on Earth Kingdom Family Ministries Web Platform live:
+
+[https://kingdom-web-nzcj.vercel.app/](https://kingdom-web-nzcj.vercel.app/)
+
 ## Getting Started Locally
 
-To set up and run this project on your local machine for development or testing, follow these steps:
+To set up and run this project on your local machine for development or testing, please refer to the dedicated README files for each part of the application:
 
-### 1. Running the Frontend
-
-Ensure you have Node.js installed on your system.
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Once the development server is active, open your web browser and navigate to `http://localhost:5173`.
-
-### 2. Running the Backend
-
-The backend runs on Python and requires an active PostgreSQL database. For detailed setup instructions, including dependency installation, database configuration, and running migrations, please refer to the dedicated [backend README.md](https://github.com/dagiteferi/kingdom_web/blob/main/backend/README.md) file.
-
-```bash
-cd backend
-# Follow instructions in backend/README.md to set up and run the server.
-```
+*   **[Frontend Setup Instructions](./frontend/README.md)**
+*   **[Backend Setup Instructions](./backend/README.md)**
 
 ## Contributing
 
