@@ -7,7 +7,13 @@ Welcome to the digital home of Heaven on Earth Kingdom Family Ministries. This p
 
 ## Our Calling: Bringing Heaven to Earth
 
-Our name, "Heaven on Earth Kingdom Family Ministries," is our mission statement. Inspired by Matthew 6:10, "Your kingdom come, your will be done, on earth as it is in heaven," we are a family of believers dedicated to manifesting God's heart in our world. We yearn to witness the transformation of individuals, cities, and nations through His divine presence and perfect will.
+Our name, "Heaven on Earth Kingdom Family Ministries," is our mission statement. We are a family of believers dedicated to manifesting God's heart in our world, yearning to witness the transformation of individuals, cities, and nations through His divine presence and perfect will.
+
+> "Your kingdom come, your will be done, on earth as it is in heaven."
+>
+> — Matthew 6:10
+
+This foundational scripture inspires our every endeavor.
 
 **Mission:** To cultivate a kingdom culture within every family by nurturing each member in God's Word, empowering them to embody His will on earth as it is in heaven. We are called to proclaim the Gospel of the Kingdom and equip families to live out their divine purpose, ensuring His will is done in our lives, our city, and our world.
 
@@ -75,11 +81,11 @@ Once the development server is active, open your web browser and navigate to `ht
 
 ### 2. Running the Backend
 
-The backend requires Python and an active PostgreSQL database. Detailed setup instructions, including virtual environment configuration and database credentials, are available in the `backend/README.md` file.
+The backend runs on Python and requires an active PostgreSQL database. To get started:
 
 ```bash
 cd backend
-# Refer to backend/README.md for detailed setup and running instructions.
+# Install dependencies, set up your database, and run migrations as per backend/README.md
 ```
 
 ## Contributing
@@ -96,7 +102,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact and Support
 
-For any inquiries, feedback, or support, please reach out to us through the contact form on the website or by opening an issue on our [GitHub repository](https://github.com/dagiteferi/kingdom_web).
-
----
-_This README was generated with the assistance of an AI agent, but carefully reviewed and refined to ensure a human-centric and professional tone._ 
+For any inquiries, feedback, or support, please reach out to us through the contact form on the website or by opening an issue on our [GitHub repository](https://github.com/dagiteferi/kingdom_web). 
