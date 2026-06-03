@@ -46,7 +46,6 @@ const aboutData = {
     { key: 'templeOfGod' },
     { key: 'supernaturalLifestyle' },
   ],
-  ],
 };
 
 export default aboutData;
