@@ -14,28 +14,38 @@ const MinistryCard = ({ title, description, icon: Icon, delay = 0 }: MinistryCar
 
   // Helper to detect and style bible verses
   const renderDescription = (text: string) => {
+    if (!text) return null;
     const parts = text.split(/("[^"]*")/);
     return parts.map((part, index) => {
       if (part.startsWith('"') && part.endsWith('"')) {
-        // Check if the next part has a bible reference (starts with — or -)
+        // Check if the next part has a bible reference (starts with — or - and contains number:number or a Bible version)
         const nextPart = parts[index + 1];
         let reference = '';
+        let isBibleVerse = false;
+        
         if (nextPart) {
-          const refMatch = nextPart.match(/^\s*[—–-]\s*(.+?)(?:\.|$)/);
+          const refMatch = nextPart.match(/^\s*[—–-]\s*([^.\n]*?(?:\d+:\d+|KJV|NIV|ESV|NLT|NKJV)[^.\n]*)(?:\.|$|\n)/i);
           if (refMatch) {
             reference = refMatch[1].trim();
             // Remove the reference from the next part so it doesn't render twice
-            parts[index + 1] = nextPart.replace(/^\s*[—–-]\s*.+?(?:\.|$)/, '');
+            parts[index + 1] = nextPart.replace(/^\s*[—–-]\s*([^.\n]*?(?:\d+:\d+|KJV|NIV|ESV|NLT|NKJV)[^.\n]*)(?:\.|$|\n)/i, '');
+            isBibleVerse = true;
           }
         }
-        return (
-          <div key={index} className="bible-verse">
-            <span>{part}</span>
-            {reference && (
-              <span className="bible-verse-ref">— {reference}</span>
-            )}
-          </div>
-        );
+        
+        if (isBibleVerse) {
+          return (
+            <div key={index} className="bible-verse">
+              <span>{part}</span>
+              {reference && (
+                <span className="bible-verse-ref">— {reference}</span>
+              )}
+            </div>
+          );
+        } else {
+          // If it's just a normal quote in quotes, render it normally (maybe slightly italic)
+          return <span key={index} className="italic text-navy/80">{part}</span>;
+        }
       }
       return <span key={index}>{part}</span>;
     });

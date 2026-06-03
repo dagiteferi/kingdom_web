@@ -81,11 +81,11 @@ Once the development server is active, open your web browser and navigate to `ht
 
 ### 2. Running the Backend
 
-The backend runs on Python and requires an active PostgreSQL database. To get started:
+The backend runs on Python and requires an active PostgreSQL database. For detailed setup instructions, including dependency installation, database configuration, and running migrations, please refer to the dedicated [backend README.md](https://github.com/dagiteferi/kingdom_web/blob/main/backend/README.md) file.
 
 ```bash
 cd backend
-# Install dependencies, set up your database, and run migrations as per backend/README.md
+# Follow instructions in backend/README.md to set up and run the server.
 ```
 
 ## Contributing

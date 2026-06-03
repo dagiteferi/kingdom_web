@@ -34,21 +34,29 @@ const Ministries = () => {
       if (part.startsWith('"') && part.endsWith('"')) {
         const nextPart = parts[index + 1];
         let reference = '';
+        let isBibleVerse = false;
+        
         if (nextPart) {
-          const refMatch = nextPart.match(/^\s*[—–-]\s*(.+?)(?:\.|$)/);
+          const refMatch = nextPart.match(/^\s*[—–-]\s*([^.\n]*?(?:\d+:\d+|KJV|NIV|ESV|NLT|NKJV)[^.\n]*)(?:\.|$|\n)/i);
           if (refMatch) {
             reference = refMatch[1].trim();
-            parts[index + 1] = nextPart.replace(/^\s*[—–-]\s*.+?(?:\.|$)/, '');
+            parts[index + 1] = nextPart.replace(/^\s*[—–-]\s*([^.\n]*?(?:\d+:\d+|KJV|NIV|ESV|NLT|NKJV)[^.\n]*)(?:\.|$|\n)/i, '');
+            isBibleVerse = true;
           }
         }
-        return (
-          <div key={index} className="bible-verse">
-            <span>{part}</span>
-            {reference && (
-              <span className="bible-verse-ref">— {reference}</span>
-            )}
-          </div>
-        );
+        
+        if (isBibleVerse) {
+          return (
+            <div key={index} className="bible-verse">
+              <span>{part}</span>
+              {reference && (
+                <span className="bible-verse-ref">— {reference}</span>
+              )}
+            </div>
+          );
+        } else {
+          return <span key={index} className="italic text-navy/80">{part}</span>;
+        }
       }
       return <span key={index}>{part}</span>;
     });
