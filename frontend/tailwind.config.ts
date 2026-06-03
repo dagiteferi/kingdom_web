@@ -139,7 +139,6 @@ export default {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-gold": "linear-gradient(135deg, hsl(var(--gold)) 0%, hsl(var(--gold-dark)) 100%)",
         "gradient-navy": "linear-gradient(135deg, hsl(var(--navy)) 0%, hsl(var(--navy-dark)) 100%)",
-        "hero-pattern": "url('/patterns/hero-pattern.svg')",
       },
       boxShadow: {
         "gold-glow": "0 0 30px hsl(var(--gold) / 0.3)",

@@ -76,7 +76,7 @@ export default function AdminLogin() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-navy p-4">
-            <div className="absolute inset-0 bg-[url('/patterns/hero-pattern.svg')] opacity-10 pointer-events-none" />
+
 
             <Card className="w-full max-w-md border-gold/20 shadow-2xl bg-white/95 backdrop-blur-sm">
                 <CardHeader className="space-y-1 text-center">
