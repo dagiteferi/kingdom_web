@@ -46,10 +46,6 @@ const aboutData = {
     { key: 'templeOfGod' },
     { key: 'supernaturalLifestyle' },
   ],
-  team: [
-    { key: 'pastorAbraham' },
-    { key: 'sisterTigist' },
-    { key: 'brotherDaniel' },
   ],
 };
 

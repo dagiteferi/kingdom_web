@@ -297,25 +297,7 @@
         "scripture": ""
       }
     },
-    "team": {
-      "title": "Meet Our Team",
-      "subtitle": "Dedicated leaders serving our community",
-      "pastorAbraham": {
-        "name": "Pastor Abraham",
-        "role": "Senior Pastor",
-        "description": "Leading our congregation with vision and compassion for over 15 years."
-      },
-      "sisterTigist": {
-        "name": "Sister Tigist",
-        "role": "Women's Ministry Leader",
-        "description": "Dedicated to empowering women through faith and fellowship."
-      },
-      "brotherDaniel": {
-        "name": "Brother Daniel",
-        "role": "Youth Pastor",
-        "description": "Passionate about raising the next generation of believers."
-      }
-    },
+
     "stats": {
       "locations": "Locations",
       "members": "Members",

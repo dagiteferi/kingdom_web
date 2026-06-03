@@ -5,7 +5,7 @@ import SeoHead from '@/components/SeoHead';
 
 const About = () => {
   const { t, i18n } = useTranslation();
-  const { mission, vision, stats, beliefs, values, team } = aboutData;
+  const { mission, vision, stats, beliefs, values } = aboutData;
 
   // Define SEO properties for the About page
   const aboutTitle = `${t('aboutPage.hero.title')} | Heaven on Earth Kingdom Family Ministries`;
@@ -245,43 +245,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* Our Team */}
-        <section className="py-16 bg-muted/20">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="max-w-4xl mx-auto text-center mb-12"
-            >
-              <h2 className="text-3xl font-bold mb-4">{t('aboutPage.team.title')}</h2>
-              <p className="text-muted-foreground">
-                {t('aboutPage.team.subtitle')}
-              </p>
-            </motion.div>
 
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {team.map((member, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-3xl font-bold text-primary mb-4">
-                    {t(`aboutPage.team.${member.key}.name`).split(' ').map(n => n[0]).join('')}
-                  </div>
-                  <h3 className="text-xl font-semibold">{t(`aboutPage.team.${member.key}.name`)}</h3>
-                  <p className="text-primary font-medium mb-2">{t(`aboutPage.team.${member.key}.role`)}</p>
-                  <p className="text-muted-foreground">{t(`aboutPage.team.${member.key}.description`)}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Stats */}
         <section className="py-16 bg-primary/5">
