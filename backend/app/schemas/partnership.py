@@ -63,9 +63,9 @@ class PartnershipResponse(PartnershipBase):
     """Schema for partnership response (admin view)."""
     
     id: UUID
-    volunteer_areas: Optional[Dict[str, Any]] = None
+    volunteer_areas: Optional[List[str]] = None
     financial_commitment: Optional[Dict[str, Any]] = None
-    material_items: Optional[Dict[str, Any]] = None
+    material_items: Optional[List[str]] = None
     status: str
     assigned_to_id: Optional[UUID] = None
     admin_notes: Optional[str] = None
