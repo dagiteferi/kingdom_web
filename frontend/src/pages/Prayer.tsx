@@ -150,7 +150,9 @@ const Prayer = () => {
             </motion.div>
           </div>
         </div>
-            {/* Bible Verses About Prayer */}
+      </section>
+
+      {/* Bible Verses About Prayer */}
       <section className="py-20 md:py-28 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -240,8 +242,6 @@ const Prayer = () => {
           </div>
         </div>
       </section>
-    </div>
-on>
     </div>
   );
 };
