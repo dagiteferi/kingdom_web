@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import logo from '@/assets/logo.png';
 
 const Footer = () => {
@@ -10,7 +11,7 @@ const Footer = () => {
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Newsletter signup:', email);
+    toast.info('Coming soon feature with a telegram bot');
     setEmail('');
   };
 
