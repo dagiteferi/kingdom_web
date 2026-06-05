@@ -150,24 +150,27 @@ const Prayer = () => {
             </motion.div>
           </div>
         </div>
-      </section>
-
-      {/* Bible Verses About Prayer */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-secondary/5 to-secondary/10">
+            {/* Bible Verses About Prayer */}
+      <section className="py-20 md:py-28 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div className="h-px w-10 bg-secondary" />
+                <span className="text-secondary font-bold tracking-widest uppercase text-xs">Scripture</span>
+                <div className="h-px w-10 bg-secondary" />
+              </div>
               <h2 className="section-title">Bible Verses About Prayer</h2>
               <p className="section-subtitle">Encouraging Scriptures to Strengthen Your Prayer Life</p>
             </motion.div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
             {[
               {
                 reference: 'Philippians 4:6-7',
@@ -175,7 +178,7 @@ const Prayer = () => {
               },
               {
                 reference: '1 Thessalonians 5:16-18',
-                text: 'Rejoice always, pray continually, give thanks in all circumstances; for this is God\'s will for you in Christ Jesus.'
+                text: "Rejoice always, pray continually, give thanks in all circumstances; for this is God's will for you in Christ Jesus."
               },
               {
                 reference: 'James 5:16',
@@ -188,47 +191,57 @@ const Prayer = () => {
             ].map((verse, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20, rotateX: 0, rotateY: 0, scale: 1 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{
-                  y: -5,
-                  rotateX: 1,
-                  rotateY: 1,
-                  scale: 1.02,
-                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
-                }}
-                transition={{
-                  duration: 0.3,
-                  ease: 'easeOut',
-                  rotateX: { duration: 0.2 },
-                  rotateY: { duration: 0.2 },
-                  scale: { duration: 0.2 }
-                }}
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform-gpu will-change-transform"
+                className="relative bg-[#fdf8ee] rounded-2xl p-10 shadow-md hover:shadow-2xl transition-all duration-400 border border-[#d4a947]/20 overflow-hidden"
+                style={{ borderLeft: '4px solid #c9973a' }}
               >
-                <motion.div
-                  whileHover={{ color: '#4f46e5' }}
-                  transition={{ duration: 0.2 }}
-                  className="text-lg mb-4"
+                {/* Top-left opening quote mark */}
+                <span
+                  className="absolute top-4 left-5 text-[5rem] leading-none font-serif text-[#c9973a]/25 select-none pointer-events-none"
+                  style={{ fontFamily: "'EB Garamond', serif", lineHeight: 1 }}
+                >
+                  "
+                </span>
+
+                {/* Verse text */}
+                <p
+                  className="relative z-10 text-xl leading-loose italic text-[#1e3a5f] mt-6"
+                  style={{ fontFamily: "'EB Garamond', serif" }}
                 >
                   "{verse.text}"
-                </motion.div>
-                <motion.p 
-                  className="text-right font-medium text-primary"
-                  whileHover={{ 
-                    scale: 1.05,
-                    x: -5
-                  }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                >
-                  — {verse.reference}
-                </motion.p>
+                </p>
+
+                {/* Reference + closing quote mark row */}
+                <div className="flex items-end justify-between mt-8">
+                  <p
+                    className="text-sm font-bold uppercase tracking-widest text-[#c9973a]"
+                    style={{ fontFamily: "'EB Garamond', serif", letterSpacing: '0.12em' }}
+                  >
+                    — {verse.reference}
+                  </p>
+
+                  {/* Bottom-right closing quote mark */}
+                  <span
+                    className="text-[4rem] leading-none font-serif text-[#c9973a]/25 select-none pointer-events-none -mb-4"
+                    style={{ fontFamily: "'EB Garamond', serif", lineHeight: 1 }}
+                  >
+                    "
+                  </span>
+                </div>
+
+                {/* Subtle bottom gold accent bar */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#c9973a]/60 via-[#d4a947]/30 to-transparent rounded-b-2xl" />
               </motion.div>
             ))}
           </div>
         </div>
       </section>
+    </div>
+on>
     </div>
   );
 };
