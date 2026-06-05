@@ -1,7 +1,5 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 const prayerVerses = [
   {
@@ -36,7 +34,7 @@ export default function PrayerVersesSection() {
           ))}
         </div>
         <div className="text-center mt-10">
-          <Link href="/prayer">
+          <Link to="/prayer">
             <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg">
               Submit a Prayer Request
             </Button>
