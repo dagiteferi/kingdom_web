@@ -34,7 +34,7 @@ class MinistryCreate(MinistryBase):
     leader_email: Optional[EmailStr] = None
     leader_phone: Optional[str] = Field(default=None, max_length=50)
     image_url: Optional[str] = Field(default=None, max_length=500)
-    activities: Optional[List[str]] = Field(
+    activities: Optional[Any] = Field(
         default=None,
         description="List of ministry activities"
     )
@@ -59,7 +59,7 @@ class MinistryUpdate(BaseModel):
     leader_email: Optional[EmailStr] = None
     leader_phone: Optional[str] = Field(default=None, max_length=50)
     image_url: Optional[str] = Field(default=None, max_length=500)
-    activities: Optional[List[str]] = None
+    activities: Optional[Any] = None
     schedule: Optional[Dict[str, Any]] = None
     is_active: Optional[bool] = None
     is_featured: Optional[bool] = None
