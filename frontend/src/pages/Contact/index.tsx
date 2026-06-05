@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
 
 const Contact = () => {
@@ -94,28 +94,6 @@ const Contact = () => {
               ))}
             </div>
 
-            {/* Office Hours */}
-            <div className="bg-card rounded-xl p-6 border border-border">
-              <div className="flex items-center gap-3 mb-4">
-                <Clock className="w-6 h-6 text-secondary" />
-                <h3 className="font-heading text-lg font-bold text-primary">{t('contactPage.hours')}</h3>
-              </div>
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('contactPage.mondayFriday')}</span>
-                  <span className="font-medium text-foreground">{t('contactInfo.monFriHours')}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('contactPage.saturday')}</span>
-                  <span className="font-medium text-foreground">{t('contactInfo.satHours')}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('contactPage.sunday')}</span>
-                  <span className="font-medium text-secondary">{t('contactPage.worshipService')}</span>
-                </div>
-              </div>
-            </div>
-
             {/* Bank Details */}
             <div className="bg-secondary/10 rounded-xl p-6 mt-6 border border-secondary/20">
               <h3 className="font-heading text-lg font-bold text-primary mb-4">{t('giving.bankDetails')}</h3>
@@ -160,8 +138,8 @@ const Contact = () => {
               className="aspect-[21/9] rounded-xl overflow-hidden shadow-card"
             >
               <iframe
-                title="Church Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.78!3d9.01!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMDAnMzYuMCJOIDM4wrA0Nic0OC4wIkU!5e0!3m2!1sen!2set!4v1"
+                title="Church Location - Adama, Ethiopia"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63053.35!2d39.2635!3d8.5400!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b1f7e91f7e929%3A0x4b4ee4e4e4e4e4e4!2sAdama%2C%20Ethiopia!5e0!3m2!1sen!2set!4v1700000000000!5m2!1sen!2set"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
