@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, Clock, MessageCircle } from 'lucide-react';
 
 const ContactForm = () => {
   const { t } = useTranslation();
@@ -17,19 +17,12 @@ const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setIsSubmitted(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    console.log('Contact form submitted:', formData);
+
+    // Simulate brief loading before showing coming soon
+    await new Promise(resolve => setTimeout(resolve, 1200));
+
     setIsSubmitting(false);
     setIsSubmitted(true);
-    
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 3000);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -44,16 +37,30 @@ const ContactForm = () => {
         animate={{ opacity: 1, scale: 1 }}
         className="bg-card rounded-xl p-8 shadow-card border border-border text-center"
       >
+        {/* Coming Soon Icon */}
         <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <Clock className="w-8 h-8 text-secondary" />
         </div>
-        <h3 className="font-heading text-xl font-bold text-primary mb-2">
-          {t('contactPage.messageSentTitle')}
+
+        <h3 className="font-heading text-2xl font-bold text-primary mb-2">
+          Coming Soon
         </h3>
-        <p className="text-muted-foreground">
-          {t('contactPage.messageSentSubtitle')}
+        <p className="text-muted-foreground mb-6">
+          Direct messaging is not available yet. In the meantime, reach us instantly on Telegram — we'd love to hear from you!
+        </p>
+
+        <a
+          href="https://t.me/kingdomfamilyyy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 btn-gold px-6 py-3 rounded-lg font-medium transition-all"
+        >
+          <MessageCircle className="w-5 h-5" />
+          Message us on Telegram
+        </a>
+
+        <p className="text-xs text-muted-foreground mt-4">
+          @kingdomfamilyyy
         </p>
       </motion.div>
     );
