@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Send } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import logo from '@/assets/logo.png';
@@ -134,12 +134,6 @@ const Footer = () => {
                 <MapPin size={18} className="text-secondary mt-0.5 flex-shrink-0" />
                 <span className="text-primary-foreground/80">
                   {t('contactInfo.address')}
-                </span>
-              </li>
-              <li className="flex items-start gap-3 text-sm">
-                <Clock size={18} className="text-secondary mt-0.5 flex-shrink-0" />
-                <span className="text-primary-foreground/80">
-                  {t('contactInfo.monFriHours')}<br />{t('contactInfo.satHours')}
                 </span>
               </li>
             </ul>
