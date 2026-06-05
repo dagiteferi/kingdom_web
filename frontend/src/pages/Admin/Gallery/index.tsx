@@ -41,9 +41,12 @@ interface GalleryItem {
 export default function AdminGallery() {
     const [items, setItems] = useState<GalleryItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
     const [formData, setFormData] = useState<Partial<GalleryItem>>({});
+    const [file, setFile] = useState<File | null>(null);
+    const [uploadMethod, setUploadMethod] = useState<"file" | "url">("file");
 
     const fetchItems = async () => {
         setIsLoading(true);
@@ -64,6 +67,8 @@ export default function AdminGallery() {
 
     const handleCreate = () => {
         setEditingItem(null);
+        setFile(null);
+        setUploadMethod("file");
         setFormData({
             is_featured: false,
             is_published: true,
@@ -76,6 +81,8 @@ export default function AdminGallery() {
 
     const handleEdit = (item: GalleryItem) => {
         setEditingItem(item);
+        setFile(null);
+        setUploadMethod("url");
         setFormData(item);
         setIsDialogOpen(true);
     };
@@ -93,6 +100,7 @@ export default function AdminGallery() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSaving(true);
         try {
             if (editingItem) {
                 await apiRequest(`/gallery/${editingItem.id}`, {
@@ -101,16 +109,44 @@ export default function AdminGallery() {
                 });
                 toast.success("Item updated");
             } else {
-                await apiRequest("/gallery", {
-                    method: "POST",
-                    body: JSON.stringify(formData),
-                });
+                if (uploadMethod === "file") {
+                    if (!file) {
+                        toast.error("Please select a file to upload");
+                        setIsSaving(false);
+                        return;
+                    }
+                    const submitData = new FormData();
+                    submitData.append("title", formData.title || "");
+                    if (formData.title_am) submitData.append("title_am", formData.title_am);
+                    if (formData.description) submitData.append("description", formData.description);
+                    submitData.append("alt_text", formData.title || "Gallery image");
+                    submitData.append("media_type", formData.media_type || "image");
+                    submitData.append("category", formData.category || "general");
+                    if (formData.event_date) submitData.append("event_date", formData.event_date);
+                    submitData.append("is_featured", String(formData.is_featured || false));
+                    submitData.append("is_published", String(formData.is_published || true));
+                    submitData.append("display_order", "0");
+                    submitData.append("file", file);
+
+                    await apiRequest("/gallery", {
+                        method: "POST",
+                        body: submitData,
+                    });
+                } else {
+                    await apiRequest("/gallery/url", {
+                        method: "POST",
+                        body: JSON.stringify(formData),
+                    });
+                }
                 toast.success("Item created");
             }
             setIsDialogOpen(false);
             fetchItems();
         } catch (error) {
-            toast.error("Failed to save item");
+            console.error("Save error:", error);
+            // Error toast is handled by apiRequest
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -217,19 +253,53 @@ export default function AdminGallery() {
                                 />
                             </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="src_url">Image/Video URL</Label>
-                                <div className="flex gap-2">
+                            {!editingItem && (
+                                <div className="space-y-2">
+                                    <Label>Source Type</Label>
+                                    <div className="flex items-center gap-2 border p-1 rounded-lg bg-slate-50 w-fit">
+                                        <button 
+                                            type="button"
+                                            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${uploadMethod === 'file' ? 'bg-white shadow-sm border border-slate-200 text-navy' : 'text-slate-500 hover:text-navy'}`}
+                                            onClick={() => setUploadMethod('file')}
+                                        >
+                                            Upload File
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${uploadMethod === 'url' ? 'bg-white shadow-sm border border-slate-200 text-navy' : 'text-slate-500 hover:text-navy'}`}
+                                            onClick={() => setUploadMethod('url')}
+                                        >
+                                            Image URL
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {(!editingItem && uploadMethod === "file") ? (
+                                <div className="space-y-2">
+                                    <Label htmlFor="file">Upload Media</Label>
+                                    <Input
+                                        id="file"
+                                        type="file"
+                                        accept="image/*,video/*"
+                                        onChange={(e) => setFile(e.target.files?.[0] || null)}
+                                        required
+                                    />
+                                    <p className="text-xs text-muted-foreground">Select an image or video to upload from your device.</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-2">
+                                    <Label htmlFor="src_url">Image/Video URL</Label>
                                     <Input
                                         id="src_url"
                                         value={formData.src_url || ""}
                                         onChange={(e) => setFormData({ ...formData, src_url: e.target.value })}
-                                        placeholder="/images/gallery/..."
+                                        placeholder="https://..."
                                         required
                                     />
+                                    <p className="text-xs text-muted-foreground">Enter the direct link to the image or video.</p>
                                 </div>
-                                <p className="text-xs text-muted-foreground">Enter the path to the image or video file.</p>
-                            </div>
+                            )}
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
@@ -280,7 +350,9 @@ export default function AdminGallery() {
                             </div>
                         </div>
                         <DialogFooter>
-                            <Button type="submit" className="bg-navy hover:bg-navy-light">Save Changes</Button>
+                            <Button type="submit" disabled={isSaving} className="bg-navy hover:bg-navy-light">
+                                {isSaving ? "Saving..." : "Save Changes"}
+                            </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
