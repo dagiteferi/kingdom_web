@@ -22,7 +22,7 @@ export const contactInfo = [
   {
     icon: MapPin,
     label: 'Location',
-    value: 'Bole Road, Addis Ababa, Ethiopia',
+    value: 'Nazareth, Ethiopia',
     href: '#map',
   },
 ];

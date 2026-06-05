@@ -138,7 +138,7 @@
     "phone": "Phone",
     "phonePlaceholder": "Enter your phone number",
     "location": "Location",
-    "locationPlaceholder": "e.g. Addis Ababa, Ethiopia",
+    "locationPlaceholder": "e.g. Nazareth, Ethiopia",
     "title": "Title",
     "message": "Message",
     "submitting": "Submitting...",
@@ -312,9 +312,10 @@
       "sundayWorship": {
         "title": "Sunday Worship Service",
         "date": "Every Sunday",
-        "time": "9:00 AM - 12:00 PM",
-        "location": "Main Sanctuary, Bole Road",
-        "description": "Join us for powerful worship, prayer, and the Word of God."
+        "time": "10:00 AM - 12:30 PM",
+        "location": "Main Sanctuary, Nazareth",
+        "description": "Join us for our main weekly worship service filled with praise, prayer, and life-changing word.",
+        "image": "https://images.unsplash.com/photo-1544427928-14206b4435ce?auto=format&fit=crop&q=80&w=800"
       },
       "wednesdayPrayer": {
         "title": "Wednesday Prayer Meeting",
@@ -336,7 +337,7 @@
     "phone": "+251 90 554 3858 / +251 99 703 6354",
     "phoneSecondary": "+251 99 703 6354",
     "email": "heavenonearthkingdomfamily@gmail.com",
-    "address": "Bole Road, Addis Ababa, Ethiopia",
+    "address": "Nazareth, Ethiopia",
     "monFriHours": "Mon-Fri: 9AM-5PM",
     "satHours": "Sat: 10AM-2PM"
   },

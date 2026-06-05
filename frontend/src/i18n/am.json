@@ -138,7 +138,7 @@
     "phone": "ስልክ",
     "phonePlaceholder": "የስልክ ቁጥርዎን ያስገቡ",
     "location": "አካባቢ",
-    "locationPlaceholder": "ለምሳሌ አዲስ አበባ፣ ኢትዮጵያ",
+    "locationPlaceholder": "ለምሳሌ ናዝሬት፣ ኢትዮጵያ",
     "title": "ርዕስ",
     "message": "መልእክት",
     "submitting": "በማስገባት ላይ...",
@@ -293,7 +293,7 @@
         "title": "የእሁድ አምልኮ አገልግሎት",
         "date": "በየእሁዱ",
         "time": "ከጥዋቱ 3:00 - ከሰዓት በኋላ 6:00",
-        "location": "ዋናው ቤተ መቅደስ፣ ቦሌ መንገድ",
+        "location": "ዋናው ቤተ መቅደስ፣ ናዝሬት",
         "description": "ኃይለኛ አምልኮ፣ ጸሎት እና የእግዚአብሔር ቃል ለማግኘት ይቀላቀሉን።"
       },
       "wednesdayPrayer": {
@@ -316,7 +316,7 @@
     "phone": "+251 90 554 3858 / +251 99 703 6354",
     "phoneSecondary": "+251 99 703 6354",
     "email": "heavenonearthkingdomfamily@gmail.com",
-    "address": "ቦሌ መንገድ፣ አዲስ አበባ፣ ኢትዮጵያ",
+    "address": "ናዝሬት፣ ኢትዮጵያ",
     "monFriHours": "ሰኞ-አርብ: ከጥዋቱ 3 ሰዓት - ምሽቱ 11 ሰዓት",
     "satHours": "ቅዳሜ: ከጥዋቱ 4 ሰዓት - ምሽቱ 8 ሰዓት"
   },
