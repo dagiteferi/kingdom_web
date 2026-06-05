@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -74,21 +75,20 @@ export default function TestimonialSection() {
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-white" id="testimonials">
+      <section className="py-20 md:py-28 bg-muted/30" id="testimonials">
         <div className="container mx-auto px-4 text-center">
           <div className="animate-pulse space-y-4">
             <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto"></div>
             <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto mt-12">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-gray-50 p-6 rounded-lg shadow-md">
-                  <div className="h-10 w-10 bg-gray-200 rounded-full mx-auto mb-4"></div>
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                <div key={i} className="bg-[#fdf8ee] p-10 rounded-2xl shadow-md h-64 border border-[#d4a947]/20 flex flex-col justify-between">
+                  <div className="space-y-4">
+                    <div className="h-4 bg-[#c9973a]/20 rounded w-full"></div>
+                    <div className="h-4 bg-[#c9973a]/20 rounded w-5/6"></div>
+                    <div className="h-4 bg-[#c9973a]/20 rounded w-2/3"></div>
                   </div>
+                  <div className="h-4 bg-[#c9973a]/30 rounded w-1/3 ml-auto mt-8"></div>
                 </div>
               ))}
             </div>
@@ -99,42 +99,78 @@ export default function TestimonialSection() {
   }
 
   return (
-    <section className="py-16 bg-white" id="testimonials">
+    <section className="py-20 md:py-28 bg-muted/30" id="testimonials">
       <div className="container mx-auto px-4 text-center">
         {/* Translation keys for these can be found in i18n/en.json and i18n/am.json */}
-        <h2 className="text-3xl font-bold mb-4">{t('testimonial.sectionTitle')}</h2>
-        <p className="text-xl text-muted-foreground mb-12">
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="h-px w-10 bg-secondary" />
+          <span className="text-secondary font-bold tracking-widest uppercase text-xs">Testimonies</span>
+          <div className="h-px w-10 bg-secondary" />
+        </div>
+        <h2 className="section-title text-navy">{t('testimonial.sectionTitle')}</h2>
+        <p className="section-subtitle mb-16">
           {t('testimonial.sectionSubtitle')}
         </p>
 
         {testimonials.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial) => (
-              <div
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
                 key={testimonial.id}
-                className="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 h-full flex flex-col"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="relative text-left bg-[#fdf8ee] rounded-2xl p-10 shadow-md hover:shadow-2xl transition-all duration-400 border border-[#d4a947]/20 flex flex-col h-full overflow-hidden"
+                style={{ borderLeft: '4px solid #c9973a' }}
               >
-                <div className="text-4xl mb-4">
-                  {categoryEmojis[testimonial.category] || '✨'}
-                </div>
-                <h3 className="text-xl font-semibold mb-2">
-                  {i18n.language === 'am' && testimonial.title ? testimonial.title : testimonial.title}
-                </h3>
-                <p className="text-muted-foreground mb-4 italic flex-grow line-clamp-3">
-                  "{i18n.language === 'am' && testimonial.content ? testimonial.content : testimonial.content}"
+                {/* Top-left opening quote mark */}
+                <span
+                  className="absolute top-4 left-5 text-[5rem] leading-none font-serif text-[#c9973a]/25 select-none pointer-events-none"
+                  style={{ fontFamily: "'EB Garamond', serif", lineHeight: 1 }}
+                >
+                  &quot;
+                </span>
+
+                {/* Testimonial text */}
+                <p
+                  className="relative z-10 text-xl leading-loose italic text-[#1e3a5f] mt-6 flex-grow"
+                  style={{ fontFamily: "'EB Garamond', serif" }}
+                >
+                  &quot;{i18n.language === 'am' && testimonial.content ? testimonial.content : testimonial.content}&quot;
                 </p>
-                <div>
-                  <p className="text-right text-sm text-gray-500">— {testimonial.name}</p>
-                  {testimonial.location && (
-                    <p className="text-right text-xs text-gray-400">{testimonial.location}</p>
-                  )}
-                  <span
-                    className={`inline-block mt-2 text-xs px-2 py-1 rounded-full ${categoryColors[testimonial.category] || 'bg-gray-100 text-gray-800'}`}
-                  >
-                    {testimonial.category.charAt(0).toUpperCase() + testimonial.category.slice(1)}
-                  </span>
+
+                {/* Reference + Emoji row */}
+                <div className="flex items-end justify-between mt-8 relative z-10">
+                  <div className="flex flex-col">
+                    <p
+                      className="text-sm font-bold uppercase tracking-widest text-[#c9973a]"
+                      style={{ fontFamily: "'EB Garamond', serif", letterSpacing: '0.12em' }}
+                    >
+                      — {testimonial.name}
+                    </p>
+                    {testimonial.location && (
+                      <p className="text-xs font-serif text-[#1e3a5f]/60 mt-2">{testimonial.location}</p>
+                    )}
+                  </div>
+                  
+                  <div className="flex flex-col items-end">
+                    <span className="text-3xl mb-1 opacity-80">{categoryEmojis[testimonial.category] || '✨'}</span>
+                  </div>
                 </div>
-              </div>
+
+                {/* Bottom-right closing quote mark */}
+                <span
+                  className="absolute bottom-4 right-5 text-[4rem] leading-none font-serif text-[#c9973a]/25 select-none pointer-events-none -mb-4"
+                  style={{ fontFamily: "'EB Garamond', serif", lineHeight: 1 }}
+                >
+                  &quot;
+                </span>
+
+                {/* Subtle bottom gold accent bar */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#c9973a]/60 via-[#d4a947]/30 to-transparent rounded-b-2xl" />
+              </motion.div>
             ))}
           </div>
         ) : (
