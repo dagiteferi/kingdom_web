@@ -341,11 +341,17 @@ const Gallery = () => {
       const cached = await staleWhileRevalidate<GalleryItemType[]>(
         CACHE_KEY,
         CACHE_TTL_MINUTES,
-        () => getGallery({ page_size: 200 }),
+        async () => {
+          // Backend max page_size is 100 — fetch both pages in parallel
+          const [page1, page2] = await Promise.all([
+            getGallery({ page_size: 100, page: 1 }),
+            getGallery({ page_size: 100, page: 2 }),
+          ]);
+          return [...page1, ...page2];
+        },
         (fresh) => {
           if (!cancelled) {
             setGalleryItems(fresh);
-            // Preload first images of fresh data
             preloadImages(fresh.filter(i => i.media_type === 'image').map(i => i.src_url));
           }
         },
@@ -357,9 +363,12 @@ const Gallery = () => {
           preloadImages(cached.filter(i => i.media_type === 'image').map(i => i.src_url));
           setIsLoading(false);
         } else {
-          // No cache at all — wait for the fetch (already kicked off above)
           try {
-            const fresh = await getGallery({ page_size: 200 });
+            const [page1, page2] = await Promise.all([
+              getGallery({ page_size: 100, page: 1 }),
+              getGallery({ page_size: 100, page: 2 }),
+            ]);
+            const fresh = [...page1, ...page2];
             if (!cancelled) {
               setGalleryItems(fresh);
               preloadImages(fresh.filter(i => i.media_type === 'image').map(i => i.src_url));
