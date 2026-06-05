@@ -139,12 +139,13 @@ const Contact = () => {
             >
               <iframe
                 title="Church Location - Adama, Ethiopia"
-                src="https://www.openstreetmap.org/export/embed.html?bbox=39.2193%2C8.4944%2C39.3193%2C8.5944&layer=mapnik&marker=8.5444%2C39.2693"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31526.94!2d39.2493!3d8.5145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b1f4c7f02e995%3A0xb66978f36cfe7998!2sAdama%2C%20Ethiopia!5e0!3m2!1sen!2set!4v1717000000001!5m2!1sen!2set"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </motion.div>
           </div>
