@@ -11,7 +11,7 @@ import TestimonialSection from '@/components/TestimonialSection';
 import SeoHead from '@/components/SeoHead';
 import { getMinistries, Ministry, getEvents, Event } from '@/services/api';
 import { toast } from 'sonner';
-import { getCache, setCache } from '@/lib/cache';
+import { staleWhileRevalidate } from '@/lib/cache';
 import { format } from 'date-fns';
 
 const MINISTRIES_CACHE_KEY = 'featured_ministries';
@@ -32,34 +32,38 @@ const Home = () => {
   };
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchMinistries = async () => {
-      const cached = getCache<Ministry[]>(MINISTRIES_CACHE_KEY);
-      if (cached) setMinistries(cached);
-      try {
-        const fresh = await getMinistries({ is_featured: true, page_size: 5 });
-        setMinistries(fresh);
-        setCache(MINISTRIES_CACHE_KEY, fresh, CACHE_TTL_MINUTES);
-      } catch (error) {
-        console.error("Failed to fetch ministries:", error);
-        if (!cached) toast.error(t('errors.fetchMinistries'));
-      }
+      await staleWhileRevalidate<Ministry[]>(
+        MINISTRIES_CACHE_KEY,
+        CACHE_TTL_MINUTES,
+        () => getMinistries({ is_featured: true, page_size: 5 }),
+        (fresh) => { if (!cancelled) setMinistries(fresh); },
+      ).then((cached) => {
+        if (cached && !cancelled) setMinistries(cached);
+      }).catch(() => {
+        if (!cancelled) toast.error(t('errors.fetchMinistries'));
+      });
     };
 
     const fetchEvents = async () => {
-      const cached = getCache<Event[]>(EVENTS_CACHE_KEY);
-      if (cached) setFeaturedEvents(cached);
-      try {
-        const fresh = await getEvents({ is_featured: true, page_size: 3 });
-        setFeaturedEvents(fresh);
-        setCache(EVENTS_CACHE_KEY, fresh, CACHE_TTL_MINUTES);
-      } catch (error) {
-        console.error("Failed to fetch events:", error);
-        if (!cached) toast.error(t('errors.fetchEvents'));
-      }
+      await staleWhileRevalidate<Event[]>(
+        EVENTS_CACHE_KEY,
+        CACHE_TTL_MINUTES,
+        () => getEvents({ is_featured: true, page_size: 3 }),
+        (fresh) => { if (!cancelled) setFeaturedEvents(fresh); },
+      ).then((cached) => {
+        if (cached && !cancelled) setFeaturedEvents(cached);
+      }).catch(() => {
+        if (!cancelled) toast.error(t('errors.fetchEvents'));
+      });
     };
 
     fetchMinistries();
     fetchEvents();
+
+    return () => { cancelled = true; };
   }, [t]);
 
   const formatEventTime = (timeStr: string) => {

@@ -1,13 +1,17 @@
 import { toast } from "sonner";
 
 const rawApiUrl = import.meta.env.VITE_API_BASE_URL || "";
-// Robust sanitization: Find where http starts and strip everything before it
 const httpIndex = rawApiUrl.indexOf("http");
 const API_URL = httpIndex !== -1 ? rawApiUrl.substring(httpIndex).trim() : rawApiUrl.trim();
 
 if (!API_URL) {
     console.error("VITE_API_BASE_URL is not defined in environment variables");
 }
+
+// ─── Request deduplication ────────────────────────────────────────────────────
+// If the same GET endpoint is called twice before the first resolves,
+// both callers share the same in-flight Promise instead of firing two requests.
+const inFlight = new Map<string, Promise<unknown>>();
 
 export const getAuthToken = () => localStorage.getItem("admin_token");
 export const setAuthToken = (token: string) => localStorage.setItem("admin_token", token);
@@ -25,39 +29,53 @@ export const apiRequest = async <T>(endpoint: string, options: FetchOptions = {}
         ...options.headers,
     };
 
-    // If body is not FormData, default to application/json.
-    // If it is FormData, the browser will automatically set the Content-Type with the correct boundary.
     if (!(options.body instanceof FormData) && !headers["Content-Type"]) {
         headers["Content-Type"] = "application/json";
     }
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
-        ...options,
-        headers,
-    });
+    const isGet = !options.method || options.method.toUpperCase() === "GET";
+    const dedupKey = isGet ? endpoint : null;
 
-    if (response.status === 401) {
-        removeAuthToken();
-        window.location.href = "/admin/login";
-        throw new Error("Unauthorized");
+    // Return existing in-flight request if one is already running for this endpoint
+    if (dedupKey && inFlight.has(dedupKey)) {
+        return inFlight.get(dedupKey) as Promise<T>;
     }
 
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        let errorMessage = "An error occurred";
-        if (typeof errorData.detail === "string") {
-            errorMessage = errorData.detail;
-        } else if (Array.isArray(errorData.detail)) {
-            errorMessage = errorData.detail.map((err: any) => `${err.loc?.slice(1).join(".") || "Field"}: ${err.msg}`).join(", ");
-        } else if (errorData.message) {
-            errorMessage = errorData.message;
+    const request = (async () => {
+        const response = await fetch(`${API_URL}${endpoint}`, {
+            ...options,
+            headers,
+        });
+
+        if (response.status === 401) {
+            removeAuthToken();
+            window.location.href = "/admin/login";
+            throw new Error("Unauthorized");
         }
-        
-        toast.error(errorMessage);
-        throw new Error(errorMessage);
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            let errorMessage = "An error occurred";
+            if (typeof errorData.detail === "string") {
+                errorMessage = errorData.detail;
+            } else if (Array.isArray(errorData.detail)) {
+                errorMessage = errorData.detail.map((err: any) => `${err.loc?.slice(1).join(".") || "Field"}: ${err.msg}`).join(", ");
+            } else if (errorData.message) {
+                errorMessage = errorData.message;
+            }
+            toast.error(errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        return response.json() as Promise<T>;
+    })();
+
+    if (dedupKey) {
+        inFlight.set(dedupKey, request as Promise<unknown>);
+        request.finally(() => inFlight.delete(dedupKey));
     }
 
-    return response.json();
+    return request;
 };
 
 export const validateToken = async (): Promise<boolean> => {
