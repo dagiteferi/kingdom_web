@@ -35,9 +35,30 @@ const Ministries = () => {
     let keyIndex = 0;
 
     const pushText = (str: string) => {
-      if (str.trim()) {
-        elements.push(<span key={keyIndex++} className="block mb-4 whitespace-pre-wrap">{str.trim()}</span>);
-      }
+      if (!str.trim()) return;
+      
+      const paragraphs = str.split('\n');
+      paragraphs.forEach(p => {
+        if (!p.trim()) return;
+        
+        if (p.trim().startsWith('-')) {
+          const textContent = p.trim().substring(1).trim();
+          elements.push(
+            <div key={keyIndex++} className="flex items-start gap-3 mb-4 group p-3 rounded-xl hover:bg-secondary/5 transition-colors duration-300">
+              <div className="w-6 h-6 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-secondary transition-colors duration-300">
+                <div className="w-2 h-2 rounded-full bg-secondary group-hover:bg-navy transition-colors duration-300" />
+              </div>
+              <span className="text-foreground/90 font-medium leading-relaxed">{textContent}</span>
+            </div>
+          );
+        } else {
+          elements.push(
+            <p key={keyIndex++} className="mb-4 text-muted-foreground leading-relaxed text-lg">
+              {p.trim()}
+            </p>
+          );
+        }
+      });
     };
 
     while (remainingText.length > 0) {
@@ -80,7 +101,7 @@ const Ministries = () => {
         quote = quote.replace(/^["“”'']{1,2}|["“”'']{1,2}$/g, '');
 
         elements.push(
-          <div key={keyIndex++} className="bible-verse">
+          <div key={keyIndex++} className="bible-verse my-6 hover:shadow-md transition-shadow duration-300">
             <span>{quote}</span>
             <span className="bible-verse-ref">— {ref}</span>
           </div>
@@ -93,7 +114,28 @@ const Ministries = () => {
       }
     }
 
-    return <div className="space-y-2">{elements}</div>;
+    return (
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: { transition: { staggerChildren: 0.1 } }
+        }}
+        className="mt-6"
+      >
+        {elements.map((el: any, i) => (
+          <motion.div
+            key={el.key || i}
+            variants={{
+              hidden: { opacity: 0, y: 15 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+            }}
+          >
+            {el}
+          </motion.div>
+        ))}
+      </motion.div>
+    );
   };
 
   useEffect(() => {
