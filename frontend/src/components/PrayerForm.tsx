@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Send, Loader2 } from 'lucide-react';
+import { apiRequest } from '@/services/api';
 
 const PrayerForm = () => {
   const { t } = useTranslation();
@@ -18,19 +19,32 @@ const PrayerForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    
-    // Reset form after delay
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: '', email: '', request: '', anonymous: false });
-    }, 3000);
+    try {
+      await apiRequest('/prayers', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: formData.anonymous ? null : (formData.name || null),
+          email: formData.anonymous ? null : (formData.email || null),
+          phone: null,
+          request: formData.request,
+          is_anonymous: formData.anonymous,
+        }),
+      });
+      
+      setIsSubmitted(true);
+      
+      // Reset form after delay
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({ name: '', email: '', request: '', anonymous: false });
+      }, 3000);
+    } catch (error) {
+      console.error('Failed to submit prayer request:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
