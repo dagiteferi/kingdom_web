@@ -14,6 +14,12 @@ const Contact = () => {
       href: 'tel:+251905543858',
     },
     {
+      icon: Phone,
+      label: t('common.phone'),
+      value: '+251 99 703 6354',
+      href: 'tel:+251997036354',
+    },
+    {
       icon: Mail,
       label: t('common.email'),
       value: 'heavenonearthkingdomfamily@gmail.com',
