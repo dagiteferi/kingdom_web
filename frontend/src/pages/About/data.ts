@@ -10,7 +10,7 @@ const aboutData = {
   stats: [
     {
       icon: MapPin,
-      value: '3',
+      value: '5',
       key: 'locations',
     },
     {
@@ -20,7 +20,7 @@ const aboutData = {
     },
     {
       icon: Clock,
-      value: '15+',
+      value: '8',
       key: 'yearsOfService',
     },
   ],
