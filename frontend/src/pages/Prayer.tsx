@@ -201,7 +201,7 @@ const Prayer = () => {
                 className="relative bg-[#fdf8ee] rounded-2xl p-10 shadow-md hover:shadow-2xl transition-all duration-400 border border-[#d4a947]/20 overflow-hidden"
                 style={{ borderLeft: '4px solid #c9973a' }}
               >
-                {/* Top-left opening quote mark */}
+               
                 <span
                   className="absolute top-4 left-5 text-[5rem] leading-none font-serif text-[#c9973a]/25 select-none pointer-events-none"
                   style={{ fontFamily: "'EB Garamond', serif", lineHeight: 1 }}
@@ -209,7 +209,7 @@ const Prayer = () => {
                   &quot;
                 </span>
 
-                {/* Verse text */}
+                
                 <p
                   className="relative z-10 text-xl leading-loose italic text-[#1e3a5f] mt-6"
                   style={{ fontFamily: "'EB Garamond', serif" }}
@@ -217,7 +217,7 @@ const Prayer = () => {
                   &quot;{verse.text}&quot;
                 </p>
 
-                {/* Reference + closing quote mark row */}
+                
                 <div className="flex items-end justify-between mt-8">
                   <p
                     className="text-sm font-bold uppercase tracking-widest text-[#c9973a]"
