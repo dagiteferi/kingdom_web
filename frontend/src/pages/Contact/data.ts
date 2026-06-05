@@ -34,9 +34,9 @@ export const officeHours = [
 ];
 
 export const bankDetails = {
-  bank: 'Commercial Bank of Ethiopia',
-  account: '1000345678901',
-  swift: 'CBETETAA',
+  bank: 'Birhan Bank',
+  account: '01231253789501',
+  swift: 'BERHETAA',
 };
 
 export const hero = {
