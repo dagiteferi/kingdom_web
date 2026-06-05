@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { apiRequest } from '@/services/api';
 
 const PartnershipForm = () => {
   const { t } = useTranslation();
@@ -37,20 +38,15 @@ const PartnershipForm = () => {
       partnership_type: formData.partnershipType,
       message: formData.message || undefined,
       volunteer_areas: formData.volunteerAreas ? formData.volunteerAreas.split(',').map(s => s.trim()) : undefined,
-      financial_commitment: formData.financialCommitment ? JSON.parse(formData.financialCommitment) : undefined,
+      financial_commitment: formData.financialCommitment ? { description: formData.financialCommitment } : undefined,
       material_items: formData.materialItems ? formData.materialItems.split(',').map(s => s.trim()) : undefined,
     };
 
     try {
-      const response = await fetch('/api/v1/partnerships', {
+      await apiRequest('/partnerships', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit partnership application');
-      }
 
       setIsSubmitted(true);
       setFormData({ name: '', email: '', phone: '', partnershipType: '', message: '', volunteerAreas: '', financialCommitment: '', materialItems: '' });
