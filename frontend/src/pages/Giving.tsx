@@ -55,7 +55,7 @@ const Giving = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="max-w-3xl mx-auto text-center mb-16"
+          className="max-w-3xl mx-auto text-center mb-20"
         >
           <h2 className="section-title mb-6">{t('giving.whyGiveTitle')}</h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
@@ -63,28 +63,100 @@ const Giving = () => {
           </p>
         </motion.div>
 
-        {/* Giving Options */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {givingOptions.map((option, index) => (
-            <motion.div
-              key={option.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-card rounded-xl p-6 shadow-card border border-border hover:border-secondary/30 transition-all duration-300"
-            >
-              <h3 className="font-heading text-xl font-bold text-primary mb-3">
-                {option.title}
-              </h3>
-              <p className="text-muted-foreground text-sm mb-4">
-                {option.description}
-              </p>
-              <p className="text-xs italic text-secondary">
-                {option.verse}
-              </p>
-            </motion.div>
-          ))}
+        {/* Giving Options — Ministry-style Bible Verse Cards */}
+        <div className="max-w-4xl mx-auto space-y-10">
+          {givingOptions.map((option, index) => {
+            // Parse verse into text and reference: "'...' - Book X:Y"
+            const verseMatch = option.verse.match(/^['\u2018\u2019\u201c\u201d]?([\s\S]+?)['\u2018\u2019\u201c\u201d]?\s*[-\u2013\u2014]\s*(.+)$/);
+            const verseText = verseMatch ? verseMatch[1].trim() : option.verse;
+            const verseRef  = verseMatch ? verseMatch[2].trim() : '';
+
+            return (
+              <motion.div
+                key={option.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.12 }}
+                viewport={{ once: true }}
+                className="group relative bg-card rounded-2xl border border-border shadow-card overflow-hidden hover:shadow-xl transition-all duration-500 hover:border-secondary/30"
+              >
+                {/* Gold left accent bar */}
+                <div
+                  className="absolute top-0 left-0 w-1.5 h-full rounded-l-2xl"
+                  style={{
+                    background: 'linear-gradient(to bottom, hsl(43 60% 52%), hsl(43 60% 52% / 0.5), hsl(43 60% 52% / 0.2))',
+                  }}
+                />
+
+                <div className="pl-8 pr-6 py-8">
+                  {/* Title + description */}
+                  <div className="mb-6">
+                    <h3 className="font-heading text-2xl font-bold text-primary mb-2 group-hover:text-secondary transition-colors duration-300">
+                      {option.title}
+                    </h3>
+                    <p className="text-muted-foreground text-base leading-relaxed">
+                      {option.description}
+                    </p>
+                  </div>
+
+                  {/* Bible verse block */}
+                  <div
+                    className="relative py-6 px-6 md:px-10 rounded-xl overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, hsl(43 60% 52% / 0.08) 0%, hsl(43 60% 52% / 0.02) 100%)',
+                      border: '1px solid hsl(43 60% 52% / 0.25)',
+                      borderLeft: '5px solid hsl(43 60% 52% / 0.8)',
+                    }}
+                  >
+                    {/* Decorative opening quote */}
+                    <span
+                      className="absolute top-0 left-3 pointer-events-none select-none"
+                      style={{
+                        fontFamily: "'EB Garamond', serif",
+                        color: 'hsl(43 60% 52% / 0.22)',
+                        fontSize: '6rem',
+                        lineHeight: 1,
+                      }}
+                    >
+                      &#8220;
+                    </span>
+
+                    <p
+                      className="relative italic text-lg md:text-xl leading-relaxed pl-4"
+                      style={{ fontFamily: "'EB Garamond', serif", color: 'hsl(214 57% 23%)' }}
+                    >
+                      {verseText}
+                    </p>
+
+                    {verseRef && (
+                      <p
+                        className="text-right mt-4 not-italic font-bold text-xs uppercase tracking-widest"
+                        style={{
+                          color: 'hsl(43 60% 42%)',
+                          fontFamily: "'Montserrat', sans-serif",
+                        }}
+                      >
+                        — {verseRef}
+                      </p>
+                    )}
+
+                    {/* Decorative closing quote */}
+                    <span
+                      className="absolute bottom-0 right-4 pointer-events-none select-none"
+                      style={{
+                        fontFamily: "'EB Garamond', serif",
+                        color: 'hsl(43 60% 52% / 0.22)',
+                        fontSize: '6rem',
+                        lineHeight: 1,
+                      }}
+                    >
+                      &#8221;
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
 
@@ -129,7 +201,7 @@ const Giving = () => {
               <div className="p-6">
                 <div className="space-y-4">
                   {bankDetails.map((detail, index) => (
-                    <div 
+                    <div
                       key={index}
                       className="flex items-center justify-between py-3 border-b border-border last:border-0"
                     >
