@@ -58,3 +58,22 @@ export const prayerRequests = [
     date: '2024-02-13',
   },
 ];
+
+export const bibleVerses = {
+  title: 'Bible Verses About Prayer',
+  subtitle: 'Encouraging Scriptures to Strengthen Your Prayer Life',
+  verses: [
+    {
+      verse: '"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus." - Philippians 4:6-7'
+    },
+    {
+      verse: '"Rejoice always, pray continually, give thanks in all circumstances; for this is God\'s will for you in Christ Jesus." - 1 Thessalonians 5:16-18'
+    },
+    {
+      verse: '"Therefore confess your sins to each other and pray for each other so that you may be healed. The prayer of a righteous person is powerful and effective." - James 5:16'
+    },
+    {
+      verse: '"This, then, is how you should pray: "Our Father in heaven, hallowed be your name, your kingdom come, your will be done, on earth as it is in heaven..."" - Matthew 6:9-13'
+    }
+  ]
+};

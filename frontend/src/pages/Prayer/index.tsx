@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Send, Clock, Users, Calendar } from 'lucide-react';
-import { prayerTimes, prayerRequests, hero } from './data';
+import { prayerTimes, prayerRequests, hero, bibleVerses } from './data';
 
 const Prayer = () => {
   const { t } = useTranslation();
@@ -36,6 +36,88 @@ const Prayer = () => {
               {hero.subtitle}
             </p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Bible Verses Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto mb-12 text-center"
+          >
+            <h2 className="text-3xl font-heading font-bold mb-4 text-primary">{bibleVerses.title}</h2>
+            <p className="text-muted-foreground text-lg">{bibleVerses.subtitle}</p>
+          </motion.div>
+
+          <div className="max-w-4xl mx-auto space-y-8">
+            {bibleVerses.verses.map((item, index) => {
+              const verseMatch = item.verse.match(/^['\u2018\u2019\u201c\u201d]?([\s\S]+?)['\u2018\u2019\u201c\u201d]?\s*[-\u2013\u2014]\s*(.+)$/);
+              const verseText = verseMatch ? verseMatch[1].trim() : item.verse;
+              const verseRef  = verseMatch ? verseMatch[2].trim() : '';
+
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="relative py-8 px-8 md:px-12 rounded-2xl overflow-hidden shadow-card hover:shadow-xl transition-all duration-500"
+                  style={{
+                    background: 'linear-gradient(135deg, hsl(43 60% 52% / 0.08) 0%, hsl(43 60% 52% / 0.02) 100%)',
+                    border: '1px solid hsl(43 60% 52% / 0.25)',
+                    borderLeft: '6px solid hsl(43 60% 52% / 0.8)',
+                  }}
+                >
+                  <span
+                    className="absolute top-2 left-4 pointer-events-none select-none"
+                    style={{
+                      fontFamily: "'EB Garamond', serif",
+                      color: 'hsl(43 60% 52% / 0.22)',
+                      fontSize: '6rem',
+                      lineHeight: 1,
+                    }}
+                  >
+                    &#8220;
+                  </span>
+                  
+                  <p
+                    className="relative italic text-xl md:text-2xl leading-relaxed pl-4"
+                    style={{ fontFamily: "'EB Garamond', serif", color: 'hsl(214 57% 23%)' }}
+                  >
+                    {verseText}
+                  </p>
+
+                  {verseRef && (
+                    <p
+                      className="text-right mt-6 not-italic font-bold text-sm uppercase tracking-[0.2em]"
+                      style={{
+                        color: 'hsl(43 60% 42%)',
+                        fontFamily: "'Montserrat', sans-serif",
+                      }}
+                    >
+                      — {verseRef}
+                    </p>
+                  )}
+
+                  <span
+                    className="absolute bottom-[-10px] right-6 pointer-events-none select-none"
+                    style={{
+                      fontFamily: "'EB Garamond', serif",
+                      color: 'hsl(43 60% 52% / 0.22)',
+                      fontSize: '6rem',
+                      lineHeight: 1,
+                    }}
+                  >
+                    &#8221;
+                  </span>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
