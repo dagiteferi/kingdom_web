@@ -29,37 +29,71 @@ const Ministries = () => {
 
   const renderDescription = (text: string) => {
     if (!text) return null;
-    const parts = text.split(/("[^"]*")/);
-    return parts.map((part, index) => {
-      if (part.startsWith('"') && part.endsWith('"')) {
-        const nextPart = parts[index + 1];
-        let reference = '';
-        let isBibleVerse = false;
-        
-        if (nextPart) {
-          const refMatch = nextPart.match(/^\s*[—–-]\s*([^.\n]*?(?:\d+:\d+|KJV|NIV|ESV|NLT|NKJV)[^.\n]*)(?:\.|$|\n)/i);
-          if (refMatch) {
-            reference = refMatch[1].trim();
-            parts[index + 1] = nextPart.replace(/^\s*[—–-]\s*([^.\n]*?(?:\d+:\d+|KJV|NIV|ESV|NLT|NKJV)[^.\n]*)(?:\.|$|\n)/i, '');
-            isBibleVerse = true;
-          }
-        }
-        
-        if (isBibleVerse) {
-          return (
-            <div key={index} className="bible-verse">
-              <span>{part}</span>
-              {reference && (
-                <span className="bible-verse-ref">— {reference}</span>
-              )}
-            </div>
-          );
-        } else {
-          return <span key={index} className="italic text-navy/80">{part}</span>;
-        }
+
+    let remainingText = text;
+    const elements: React.ReactNode[] = [];
+    let keyIndex = 0;
+
+    const pushText = (str: string) => {
+      if (str.trim()) {
+        elements.push(<span key={keyIndex++} className="block mb-4 whitespace-pre-wrap">{str.trim()}</span>);
       }
-      return <span key={index}>{part}</span>;
-    });
+    };
+
+    while (remainingText.length > 0) {
+      const bookRegex = "(?:[1-3]\\s+)?[A-Za-z\\u1200-\\u137F]+(?:\\s+[A-Za-z\\u1200-\\u137F]+){0,2}";
+      const refRegex = `(${bookRegex}\\s+\\d+(?:[:፥]\\d+)?(?:\\s*\\([A-Z]+\\))?)`;
+      
+      const p1 = new RegExp(`(["“”'']{1,2}[\\s\\S]+?["“”'']{1,2})\\s*[—–-]\\s*${refRegex}`);
+      const p2 = new RegExp(`${refRegex}\\s*(?:¯+)?\\s*([⁰¹²³⁴⁵⁶⁷⁸⁹]+[\\s\\S]+?(?=(?:\\s*-[A-Za-z\\u1200-\\u137F]|$|\\n\\n)))`);
+
+      const match1 = remainingText.match(p1);
+      const match2 = remainingText.match(p2);
+
+      let bestMatch = null;
+      let pattern = 0;
+
+      if (match1 && match2) {
+        if (match1.index! < match2.index!) {
+          bestMatch = match1;
+          pattern = 1;
+        } else {
+          bestMatch = match2;
+          pattern = 2;
+        }
+      } else if (match1) {
+        bestMatch = match1;
+        pattern = 1;
+      } else if (match2) {
+        bestMatch = match2;
+        pattern = 2;
+      }
+
+      if (bestMatch) {
+        const prefix = remainingText.substring(0, bestMatch.index);
+        pushText(prefix);
+
+        let quote = pattern === 1 ? bestMatch[1] : bestMatch[2];
+        let ref = pattern === 1 ? bestMatch[2] : bestMatch[1];
+        
+        // Remove surrounding quotes for cleaner display inside the styled block
+        quote = quote.replace(/^["“”'']{1,2}|["“”'']{1,2}$/g, '');
+
+        elements.push(
+          <div key={keyIndex++} className="bible-verse">
+            <span>{quote}</span>
+            <span className="bible-verse-ref">— {ref}</span>
+          </div>
+        );
+
+        remainingText = remainingText.substring(bestMatch.index! + bestMatch[0].length);
+      } else {
+        pushText(remainingText);
+        break;
+      }
+    }
+
+    return <div className="space-y-2">{elements}</div>;
   };
 
   useEffect(() => {
