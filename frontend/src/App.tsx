@@ -9,7 +9,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import PageLoader from "@/components/PageLoader";
+import PageLoader, { RouteProgressBar } from "@/components/PageLoader";
 
 // Public pages — lazy loaded
 const Home        = lazy(() => import('./pages/Home'));
@@ -41,7 +41,9 @@ const PublicLayout = () => (
   <div className="flex flex-col min-h-screen">
     <Header />
     <main className="flex-1">
-      <Outlet />
+      <Suspense fallback={<RouteProgressBar />}>
+        <Outlet />
+      </Suspense>
     </main>
     <Footer />
   </div>
@@ -55,6 +57,7 @@ const App = () => (
       <BrowserRouter>
         <ScrollToTop />
         <ErrorBoundary>
+          {/* Initial app load — full splash screen */}
           <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Admin Routes */}
@@ -70,7 +73,7 @@ const App = () => (
                 <Route path="partnerships" element={<AdminPartnerships />} />
               </Route>
 
-              {/* Public Routes */}
+              {/* Public Routes — inner Suspense in PublicLayout handles transitions */}
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
