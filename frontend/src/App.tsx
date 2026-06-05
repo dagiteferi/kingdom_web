@@ -41,9 +41,7 @@ const PublicLayout = () => (
   <div className="flex flex-col min-h-screen">
     <Header />
     <main className="flex-1">
-      <Suspense fallback={<RouteProgressBar />}>
-        <Outlet />
-      </Suspense>
+      <Outlet />
     </main>
     <Footer />
   </div>
