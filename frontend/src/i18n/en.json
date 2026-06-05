@@ -645,7 +645,7 @@
       "subtitle": "Make your transfer to the account details below",
       "secure": "Secure and direct",
       "bank": "Bank",
-      "bankName": "Commercial Bank of Ethiopia",
+      "bankName": "Birhan Bank",
       "account": "Account Number",
       "accountNumber": "1000345678901",
       "swift": "SWIFT Code",
@@ -653,15 +653,6 @@
       "reference": "Reference",
       "referenceNote": "Please include your name and 'Tithe/Offering/Missions' as the payment reference so we can properly allocate your gift.",
       "questions": "For questions about giving or to receive a giving statement, please contact us at"
-    },
-    "impact": {
-      "title": "Your Giving Makes a Difference",
-      "stats": [
-        { "number": "500+", "label": "Families Fed Monthly" },
-        { "number": "100+", "label": "Children in Sunday School" },
-        { "number": "3", "label": "Church Plants Supported" }
-      ],
-      "thankYou": "Thank you for your faithful generosity. Together, we are making an eternal impact in Ethiopia and beyond."
     }
   },
   "newsletter": {

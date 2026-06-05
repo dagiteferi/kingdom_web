@@ -25,11 +25,6 @@ const Giving = () => {
     verse: string;
   }>;
 
-  const impactStats = t('giving.impact.stats', { returnObjects: true }) as Array<{
-    number: string;
-    label: string;
-  }>;
-
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -184,34 +179,6 @@ const Giving = () => {
             </motion.div>
           </div>
         </div>
-      </section>
-
-      {/* Impact Section */}
-      <section className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto text-center bg-gradient-to-br from-secondary/10 to-secondary/5 rounded-2xl p-8 md:p-12 border border-secondary/20"
-        >
-          <h2 className="font-heading text-3xl font-bold text-primary mb-6">
-            {t('giving.impact.title')}
-          </h2>
-          <div className="grid sm:grid-cols-3 gap-6 mb-8">
-            {impactStats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <p className="font-heading text-4xl font-bold text-secondary mb-2">
-                  {stat.number}
-                </p>
-                <p className="text-muted-foreground text-sm">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-          <p className="text-muted-foreground leading-relaxed">
-            {t('giving.impact.thankYou')}
-          </p>
-        </motion.div>
       </section>
     </div>
   );
