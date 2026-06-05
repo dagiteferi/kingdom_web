@@ -64,9 +64,13 @@ const Prayer = () => {
 
           <div className="max-w-4xl mx-auto space-y-8">
             {bibleVerses.verses.map((item, index) => {
-              const verseMatch = item.verse.match(/^['\u2018\u2019\u201c\u201d]?([\s\S]+?)['\u2018\u2019\u201c\u201d]?\s*[-\u2013\u2014]\s*(.+)$/);
-              const verseText = verseMatch ? verseMatch[1].trim() : item.verse;
+              // Parse verse match to strip ALL quotes (including straight double quotes) and separate the ref
+              const verseMatch = item.verse.match(/^["'\u2018\u2019\u201c\u201d]?([\s\S]+?)["'\u2018\u2019\u201c\u201d]?\s*[-\u2013\u2014]\s*(.+)$/);
+              let verseText = verseMatch ? verseMatch[1].trim() : item.verse;
               const verseRef  = verseMatch ? verseMatch[2].trim() : '';
+
+              // Clean up any remaining quotes at the start or end of the text
+              verseText = verseText.replace(/^["“”'']{1,2}|["“”'']{1,2}$/g, '');
 
               return (
                 <motion.div
@@ -77,7 +81,7 @@ const Prayer = () => {
                   viewport={{ once: true }}
                 >
                   <div className="bible-verse hover:shadow-md transition-shadow duration-300">
-                    <span>{verseText}</span>
+                    <span className="block mb-2">{verseText}</span>
                     {verseRef && (
                       <span className="bible-verse-ref">— {verseRef}</span>
                     )}
