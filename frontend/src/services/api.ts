@@ -20,11 +20,16 @@ interface FetchOptions extends RequestInit {
 export const apiRequest = async <T>(endpoint: string, options: FetchOptions = {}): Promise<T> => {
     const token = getAuthToken();
 
-    const headers = {
-        "Content-Type": "application/json",
+    const headers: Record<string, string> = {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...options.headers,
     };
+
+    // If body is not FormData, default to application/json.
+    // If it is FormData, the browser will automatically set the Content-Type with the correct boundary.
+    if (!(options.body instanceof FormData) && !headers["Content-Type"]) {
+        headers["Content-Type"] = "application/json";
+    }
 
     const response = await fetch(`${API_URL}${endpoint}`, {
         ...options,
