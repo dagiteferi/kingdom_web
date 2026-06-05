@@ -28,7 +28,7 @@ const Contact = () => {
     {
       icon: MapPin,
       label: t('common.location'),
-      value: 'Bole Road, Addis Ababa, Ethiopia',
+      value: t('contactInfo.address'),
       href: '#map',
     },
   ];
