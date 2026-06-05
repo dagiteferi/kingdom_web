@@ -21,7 +21,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { apiRequest } from "@/services/api";
 import { toast } from "sonner";
-import { Check, X, Star, Eye } from "lucide-react";
+import { Check, X, Star, Eye, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { TestimonialTableSkeleton } from "./TableSkeleton";
 
@@ -88,6 +88,20 @@ export default function AdminTestimonials() {
         }
     };
 
+    const handleDelete = async (id: string) => {
+        if (!window.confirm("Are you sure you want to permanently delete this testimonial?")) return;
+
+        try {
+            await apiRequest(`/testimonials/${id}`, {
+                method: "DELETE",
+            });
+            toast.success("Testimonial deleted successfully");
+            fetchTestimonials();
+        } catch (error) {
+            toast.error("Failed to delete testimonial");
+        }
+    };
+
     const getStatusColor = (status: string) => {
         switch (status) {
             case "approved":
@@ -140,10 +154,21 @@ export default function AdminTestimonials() {
                                             {t.is_featured && <Star className="w-4 h-4 text-gold fill-gold" />}
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <Button variant="ghost" size="sm" onClick={() => handleReview(t)}>
-                                                <Eye className="w-4 h-4 mr-2" />
-                                                Review
-                                            </Button>
+                                            <div className="flex justify-end gap-2">
+                                                <Button variant="ghost" size="sm" onClick={() => handleReview(t)}>
+                                                    <Eye className="w-4 h-4 mr-2" />
+                                                    Review
+                                                </Button>
+                                                <Button 
+                                                    variant="ghost" 
+                                                    size="sm" 
+                                                    className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                                                    onClick={() => handleDelete(t.id)}
+                                                >
+                                                    <Trash2 className="w-4 h-4 mr-2" />
+                                                    Delete
+                                                </Button>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))
