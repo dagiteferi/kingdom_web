@@ -206,7 +206,7 @@ const Prayer = () => {
                   className="absolute top-4 left-5 text-[5rem] leading-none font-serif text-[#c9973a]/25 select-none pointer-events-none"
                   style={{ fontFamily: "'EB Garamond', serif", lineHeight: 1 }}
                 >
-                  "
+                  &quot;
                 </span>
 
                 {/* Verse text */}
@@ -214,7 +214,7 @@ const Prayer = () => {
                   className="relative z-10 text-xl leading-loose italic text-[#1e3a5f] mt-6"
                   style={{ fontFamily: "'EB Garamond', serif" }}
                 >
-                  "{verse.text}"
+                  &quot;{verse.text}&quot;
                 </p>
 
                 {/* Reference + closing quote mark row */}
@@ -231,7 +231,7 @@ const Prayer = () => {
                     className="text-[4rem] leading-none font-serif text-[#c9973a]/25 select-none pointer-events-none -mb-4"
                     style={{ fontFamily: "'EB Garamond', serif", lineHeight: 1 }}
                   >
-                    "
+                    &quot;
                   </span>
                 </div>
 
