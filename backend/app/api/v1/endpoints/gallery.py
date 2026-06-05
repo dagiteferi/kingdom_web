@@ -33,9 +33,11 @@ from app.schemas.gallery import (
 )
 from app.schemas.common import MessageResponse, PaginatedResponse
 from app.utils.supabase import supabase_storage
+from app.config import settings
 
 
 router = APIRouter(prefix="/gallery", tags=["Gallery"])
+
 
 
 @router.get("", response_model=PaginatedResponse[GalleryItemPublic])
@@ -331,7 +333,7 @@ async def delete_existing_gallery_item(
     
     try:
         # Delete file from storage if it's in our Supabase bucket
-        if item.src_url and settings.SUPABASE_URL in item.src_url:
+        if item.src_url and settings.supabase_url in item.src_url:
             try:
                 # Extract the file path from the URL
                 file_path = "/".join(item.src_url.split("/")[3:])
@@ -341,7 +343,7 @@ async def delete_existing_gallery_item(
                 print(f"Error deleting file from storage: {str(e)}")
         
         # Delete thumbnail if it exists and is in our storage
-        if item.thumbnail_url and settings.SUPABASE_URL in (item.thumbnail_url or ""):
+        if item.thumbnail_url and settings.supabase_url in (item.thumbnail_url or ""):
             try:
                 thumb_path = "/".join(item.thumbnail_url.split("/")[3:])
                 await supabase_storage.delete_file(thumb_path)
