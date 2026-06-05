@@ -620,11 +620,6 @@
     "description": "Giving is an act of worship and obedience to God. When we give, we acknowledge that everything we have belongs to Him, and we partner with His work in transforming lives and communities. Your generosity enables us to continue spreading the Gospel, serving the needy, and building the Kingdom of God.",
     "options": [
       {
-        "title": "Tithe",
-        "description": "Honor God with the first 10% of your income.",
-        "verse": "'Bring the whole tithe into the storehouse...' - Malachi 3:10"
-      },
-      {
         "title": "Offering",
         "description": "Give generously beyond your tithe as God leads.",
         "verse": "'Each of you should give what you have decided in your heart...' - 2 Corinthians 9:7"
