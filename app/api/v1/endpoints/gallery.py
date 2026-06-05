@@ -140,6 +140,9 @@ async def process_uploaded_file(
         file_extension = os.path.splitext(file.filename or '')[1].lower() or '.bin'
         file_name = f"{uuid.uuid4()}{file_extension}"
         
+        # Reset file cursor before uploading since we read it above
+        await file.seek(0)
+        
         # Upload to Supabase
         public_url, file_path = await supabase_storage.upload_file(
             file=file,
