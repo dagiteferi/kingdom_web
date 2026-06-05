@@ -39,7 +39,15 @@ export const apiRequest = async <T>(endpoint: string, options: FetchOptions = {}
 
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        const errorMessage = errorData.detail || "An error occurred";
+        let errorMessage = "An error occurred";
+        if (typeof errorData.detail === "string") {
+            errorMessage = errorData.detail;
+        } else if (Array.isArray(errorData.detail)) {
+            errorMessage = errorData.detail.map((err: any) => `${err.loc?.slice(1).join(".") || "Field"}: ${err.msg}`).join(", ");
+        } else if (errorData.message) {
+            errorMessage = errorData.message;
+        }
+        
         toast.error(errorMessage);
         throw new Error(errorMessage);
     }
