@@ -1,7 +1,11 @@
-from typing import Annotated, Optional
-from fastapi import Depends, HTTPException, status
+from typing import TYPE_CHECKING, Annotated, Optional
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
+
+if TYPE_CHECKING:
+    from app.chatbot.knowledge_base import KnowledgeBaseService
+    from app.chatbot.session import SessionManager
 
 from app.config import settings
 from app.database import get_db
@@ -96,3 +100,17 @@ ActiveAdmin = Annotated[Admin, Depends(get_current_active_admin)]
 SuperAdmin = Annotated[Admin, Depends(get_current_superadmin)]
 OptionalAdmin = Annotated[Optional[Admin], Depends(get_optional_current_admin)]
 DBSession = Annotated[AsyncSession, Depends(get_db)]
+
+
+# ---------------------------------------------------------------------------
+# Chatbot service dependencies (Task 11.3)
+# ---------------------------------------------------------------------------
+
+def get_knowledge_base(request: Request) -> "KnowledgeBaseService":
+    """Return the KnowledgeBaseService stored on app.state at startup."""
+    return request.app.state.knowledge_base
+
+
+def get_session_manager(request: Request) -> "SessionManager":
+    """Return the SessionManager stored on app.state at startup."""
+    return request.app.state.session_manager
