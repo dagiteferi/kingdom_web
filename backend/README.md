@@ -1,3 +1,12 @@
+---
+title: Heaven on Earth Kingdom CMS Backend
+emoji: 🕊
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+---
+
 # Heaven on Earth CMS Backend
 
 A robust and secure Content Management System (CMS) backend, meticulously crafted to power the Heaven on Earth Kingdom Family Ministries web platform. This service provides a comprehensive suite of APIs for managing all aspects of the ministry's digital content, from events and ministries to prayer requests and partnerships.
