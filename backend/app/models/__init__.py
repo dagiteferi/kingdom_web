@@ -11,6 +11,7 @@ from app.models.gallery import GalleryItem
 from app.models.prayer import PrayerRequest
 from app.models.testimonial import Testimonial
 from app.models.partnership import Partnership
+from app.models.chatbot import ChatbotKnowledgeChunk
 
 __all__ = [
     "Admin",
@@ -20,4 +21,5 @@ __all__ = [
     "PrayerRequest",
     "Testimonial",
     "Partnership",
+    "ChatbotKnowledgeChunk",
 ]

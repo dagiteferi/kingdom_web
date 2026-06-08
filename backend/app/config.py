@@ -80,6 +80,17 @@ class Settings(BaseSettings):
         alias="SMTP_FROM_NAME"
     )
     
+    # Chatbot / AI settings
+    groq_api_key: str = Field(..., alias="GROQ_API_KEY")
+    chatbot_rate_limit: int = Field(default=30, alias="CHATBOT_RATE_LIMIT")
+    chat_session_ttl_minutes: int = Field(default=30, alias="CHAT_SESSION_TTL_MINUTES")
+    knowledge_base_refresh_days: int = Field(default=15, alias="KNOWLEDGE_BASE_REFRESH_DAYS")
+    chatbot_crawl_urls: str = Field(..., alias="CHATBOT_CRAWL_URLS")
+    embedding_model: str = Field(
+        default="sentence-transformers/all-MiniLM-L6-v2",
+        alias="EMBEDDING_MODEL",
+    )
+
     # Logging
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
     log_format: str = Field(default="json", alias="LOG_FORMAT")
@@ -95,6 +106,10 @@ class Settings(BaseSettings):
     @property
     def max_upload_size_bytes(self) -> int:
         return self.max_upload_size_mb * 1024 * 1024
+
+    @property
+    def chatbot_crawl_urls_list(self) -> List[str]:
+        return [url.strip() for url in self.chatbot_crawl_urls.split(",") if url.strip()]
     
     @field_validator("jwt_secret_key")
     @classmethod
