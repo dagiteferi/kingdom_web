@@ -10,6 +10,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import PageLoader, { RouteProgressBar } from "@/components/PageLoader";
+import ChatWidget from "@/components/chatbot/ChatWidget";
 
 // Public pages — lazy loaded
 const Home        = lazy(() => import('./pages/Home'));
@@ -44,6 +45,7 @@ const PublicLayout = () => (
       <Outlet />
     </main>
     <Footer />
+    <ChatWidget />
   </div>
 );
 
