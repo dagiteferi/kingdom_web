@@ -22,6 +22,7 @@ from langchain_core.messages import AIMessage
 from pydantic import ValidationError
 
 from app.chatbot.session import AgentState
+from app.config import settings
 from app.schemas.partnership import PartnershipCreate
 from app.schemas.prayer import PrayerRequestCreate
 from app.schemas.testimonial import TestimonialCreate
@@ -32,7 +33,10 @@ logger = structlog.get_logger(__name__)
 # Module-level HTTP client singleton (Task 8.4)
 # ---------------------------------------------------------------------------
 
-_http_client = httpx.AsyncClient(base_url="http://localhost:8000", timeout=10.0)
+_http_client = httpx.AsyncClient(
+    base_url=f"http://{settings.host}:{settings.port}",
+    timeout=10.0,
+)
 
 # ---------------------------------------------------------------------------
 # Endpoint routing map

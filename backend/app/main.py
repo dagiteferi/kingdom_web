@@ -1,3 +1,4 @@
+import asyncio
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from fastapi import FastAPI, Request, status
@@ -16,26 +17,69 @@ from app.api.v1.endpoints import (
     prayers,
     testimonials,
     partnerships,
+    chat,
 )
 from app.config import settings
-from app.database import init_db, close_db, get_db
+from app.database import init_db, close_db, get_db, async_session_maker
 from app.crud.admin import create_initial_admin
 from app.schemas.common import HealthResponse
 
 limiter = Limiter(key_func=get_remote_address)
 
 
+async def _evict_stale_sessions_loop(session_manager) -> None:
+    """Background task: evict idle sessions every 5 minutes."""
+    while True:
+        await asyncio.sleep(300)
+        evicted = session_manager._evict_stale()
+        if evicted:
+            import structlog
+            structlog.get_logger(__name__).info(
+                "stale_sessions_evicted", count=evicted
+            )
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Manage application startup and shutdown events."""
+    # --- existing DB + admin setup ---
     await init_db()
-    
-    # Create initial admin if none exists
     async for db in get_db():
         await create_initial_admin(db)
-        break  # Only need one session
-        
+        break
+
+    # --- chatbot startup (Tasks 11.1, 4.5, 5.7) ---
+    from app.chatbot.startup import init_chatbot
+    from app.chatbot.scheduler import start_scheduler, stop_scheduler
+    from app.chatbot.nodes.knowledge import setup_knowledge_retrieval_node
+    from app.chatbot.nodes.submit import _http_client as chatbot_http_client
+
+    knowledge_base, session_manager = await init_chatbot()
+    app.state.knowledge_base = knowledge_base
+    app.state.session_manager = session_manager
+
+    # Wire knowledge retrieval node with KB + DB session factory
+    setup_knowledge_retrieval_node(knowledge_base, async_session_maker)
+
+    # Start 15-day content refresh scheduler
+    start_scheduler(knowledge_base)
+
+    # Start background stale-session eviction task (every 5 min)
+    eviction_task = asyncio.create_task(
+        _evict_stale_sessions_loop(session_manager)
+    )
+
     yield
+
+    # --- shutdown ---
+    eviction_task.cancel()
+    try:
+        await eviction_task
+    except asyncio.CancelledError:
+        pass
+
+    stop_scheduler()
+    await chatbot_http_client.aclose()
     await close_db()
 
 
@@ -88,6 +132,7 @@ app.include_router(gallery.router, prefix=api_v1_prefix)
 app.include_router(prayers.router, prefix=api_v1_prefix)
 app.include_router(testimonials.router, prefix=api_v1_prefix)
 app.include_router(partnerships.router, prefix=api_v1_prefix)
+app.include_router(chat.router, prefix=api_v1_prefix)
 
 
 @app.exception_handler(Exception)
