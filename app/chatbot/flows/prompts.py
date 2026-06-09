@@ -90,12 +90,10 @@ FIELD_PROMPTS: dict[str, dict[str, str]] = {
 
     "prayer_is_anonymous": {
         "en": (
-            "I'm honoured to pray with you. Would you like to submit your request "
-            "anonymously? (Reply **yes** or **no**.)"
+            "Our prayer team would be honoured to receive your request. Would you like to submit it anonymously? (Reply **yes** or **no**.)"
         ),
         "am": (
-            "ከእርስዎ ጋር ለመጸለይ ክብር ይሰማኛል። ጥያቄዎን ሳይታወቅ ማስገባት ይፈልጋሉ? "
-            "(**አዎ** ወይም **አይ** ብለው ይመልሱ።)"
+            "የጸሎት ቡድናችን ጥያቄዎን ለመቀበል ደስተኛ ናቸው። ጥያቄዎን ሳይታወቅ ማስገባት ይፈልጋሉ? (**አዎ** ወይም **አይ** ብለው ይምለሱ።)"
         ),
     },
     "prayer_name": {
