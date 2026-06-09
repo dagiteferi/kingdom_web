@@ -21,7 +21,7 @@ _FALLBACK_EN = (
     "• Share a Testimony\n"
     "• Submit a Prayer Request\n"
     "• Explore Partnership\n"
-    "• Ask a question about our church\n\n"
+    "• Ask a question about Heaven on Earth Kingdom Family Ministries\n\n"
     "What would you like to do?"
 )
 
@@ -30,7 +30,7 @@ _FALLBACK_AM = (
     "• ምስክርነት ለማካፈል\n"
     "• ጸሎት ለማቅረብ\n"
     "• አጋርነት ለማሰስ\n"
-    "• ስለ ቤተ ክርስቲያናችን ጥያቄ ለመጠየቅ\n\n"
+    "• ስለ ሰማይ ላይ ምድር መንግሥት ቤተሰብ አገልግሎቶች ጥያቄ ለመጠየቅ\n\n"
     "ምን ማድረግ ይፈልጋሉ?"
 )
 
