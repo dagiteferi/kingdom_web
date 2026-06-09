@@ -65,12 +65,12 @@ _SUCCESS_MESSAGES: dict[str, dict[str, str]] = {
     },
     "prayer": {
         "en": (
-            "🙏 Your prayer request has been submitted. "
-            "Our church family will be praying for you. God bless you!"
+            "✉️ Your prayer request has been received and will be forwarded to our prayer team. "
+            "They will lift your request up in prayer. God bless you!"
         ),
         "am": (
-            "🙏 የጸሎት ጥያቄዎ ተልኳል። "
-            "የቤተ ክርስቲያናችን ቤተሰብ ለእርስዎ ይጸልያል። እግዚአብሔር ይባርክዎ!"
+            "✉️ የጸሎት ጥያቄዎ ደርሷል እና ለጸሎት ቡድናችን ይተላለፋል። "
+            "ቡድናችን ጥያቄዎን ያቀርባል። እግዚአብሔር ይባርክዎ!"
         ),
     },
     "partnership": {
