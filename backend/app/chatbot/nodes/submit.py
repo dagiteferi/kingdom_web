@@ -55,11 +55,11 @@ _ENDPOINTS: dict[str, str] = {
 _SUCCESS_MESSAGES: dict[str, dict[str, str]] = {
     "testimony": {
         "en": (
-            "🙏 Your testimony has been submitted! "
+            "✉️ Your testimony has been submitted to Heaven on Earth Kingdom Family Ministries! "
             "It will be reviewed before publishing. God bless you!"
         ),
         "am": (
-            "🙏 ምስክርነትዎ ተልኳል! "
+            "✉️ ምስክርነትዎ ለሰማይ ላይ ምድር መንግሥት ቤተሰብ አገልግሎቶች ተልኳል! "
             "ከመታተሙ በፊት ይገመገማል። እግዚአብሔር ይባርክዎ!"
         ),
     },
@@ -70,16 +70,16 @@ _SUCCESS_MESSAGES: dict[str, dict[str, str]] = {
         ),
         "am": (
             "✉️ የጸሎት ጥያቄዎ ደርሷል እና ለጸሎት ቡድናችን ይተላለፋል። "
-            "ቡድናችን ጥያቄዎን ያቀርባል። እግዚአብሔር ይባርክዎ!"
+            "ቡድናችን ጥያቄዎን ያቀርባሉ። እግዚአብሔር ይባርክዎ!"
         ),
     },
     "partnership": {
         "en": (
-            "🙏 Your partnership application has been submitted! "
+            "✉️ Your partnership application has been submitted to Heaven on Earth Kingdom Family Ministries! "
             "Our team will be in touch soon. God bless you!"
         ),
         "am": (
-            "🙏 የአጋርነት ማመልከቻዎ ተልኳል! "
+            "✉️ የአጋርነት ማመልከቻዎ ለሰማይ ላይ ምድር መንግሥት ቤተሰብ አገልግሎቶች ተልኳል! "
             "ቡድናችን በቅርቡ ያናግርዎታል። እግዚአብሔር ይባርክዎ!"
         ),
     },
