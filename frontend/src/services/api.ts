@@ -131,7 +131,7 @@ export const getTestimonials = async (filters: GetItemsFilters = {}): Promise<Te
 
 export const getPrayerRequests = async (filters: GetItemsFilters = {}): Promise<PrayerRequest[]> => {
     const queryString = buildQueryString(filters);
-    const response = await apiRequest<{ items: PrayerRequest[] }>(`/prayer-requests${queryString}`);
+    const response = await apiRequest<{ items: PrayerRequest[] }>(`/prayers${queryString}`);
     return response.items;
 };
 

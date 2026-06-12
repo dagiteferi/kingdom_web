@@ -25,8 +25,7 @@ import { PartnershipTableSkeleton } from "./TableSkeleton";
 
 interface Partnership {
     id: string;
-    organization_name: string;
-    contact_person: string;
+    name: string;
     email: string;
     phone: string;
     partnership_type: string;
@@ -105,8 +104,7 @@ export default function AdminPartnerships() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Organization</TableHead>
-                                <TableHead>Contact Person</TableHead>
+                                <TableHead>Applicant</TableHead>
                                 <TableHead>Type</TableHead>
                                 <TableHead>Date</TableHead>
                                 <TableHead>Status</TableHead>
@@ -120,15 +118,14 @@ export default function AdminPartnerships() {
                                         <TableCell className="font-medium">
                                             <div className="flex items-center gap-2">
                                                 <Building2 className="w-4 h-4 text-gray-400" />
-                                                {p.organization_name}
+                                                {p.name}
                                             </div>
                                         </TableCell>
-                                        <TableCell>{p.contact_person}</TableCell>
                                         <TableCell className="capitalize">{p.partnership_type}</TableCell>
                                         <TableCell>{format(new Date(p.created_at), "MMM d, yyyy")}</TableCell>
                                         <TableCell>
-                                            <Badge variant={p.status === 'approved' ? 'default' : 'secondary'}
-                                                className={p.status === 'approved' ? 'bg-green-600' : p.status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}>
+                                            <Badge variant={p.status === 'active' ? 'default' : 'secondary'}
+                                                className={p.status === 'active' ? 'bg-green-600' : p.status === 'declined' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}>
                                                 {p.status}
                                             </Badge>
                                         </TableCell>
@@ -164,12 +161,8 @@ export default function AdminPartnerships() {
                         <div className="space-y-6 py-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <Label className="text-muted-foreground">Organization</Label>
-                                    <p className="font-medium">{selectedPartnership.organization_name}</p>
-                                </div>
-                                <div className="space-y-1">
-                                    <Label className="text-muted-foreground">Contact Person</Label>
-                                    <p className="font-medium">{selectedPartnership.contact_person}</p>
+                                    <Label className="text-muted-foreground">Applicant Name</Label>
+                                    <p className="font-medium">{selectedPartnership.name}</p>
                                 </div>
                                 <div className="space-y-1">
                                     <Label className="text-muted-foreground">Email</Label>
@@ -197,10 +190,10 @@ export default function AdminPartnerships() {
                     )}
 
                     <DialogFooter className="gap-2 sm:gap-0">
-                        <Button variant="outline" onClick={() => updateStatus("rejected")}>
-                            Reject
+                        <Button variant="outline" onClick={() => updateStatus("declined")}>
+                            Decline
                         </Button>
-                        <Button className="bg-green-600 hover:bg-green-700" onClick={() => updateStatus("approved")}>
+                        <Button className="bg-green-600 hover:bg-green-700" onClick={() => updateStatus("active")}>
                             Approve Partnership
                         </Button>
                     </DialogFooter>
