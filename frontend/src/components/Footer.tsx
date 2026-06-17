@@ -122,13 +122,35 @@ const Footer = () => {
                 <Phone size={18} className="text-secondary mt-0.5 flex-shrink-0" />
                 <a href={`tel:${t('contactInfo.phone')}`} className="text-primary-foreground/80 hover:text-secondary transition-colors">
                   {t('contactInfo.phone')}
-                </a>
+                              <a
+                href="https://www.instagram.com/hon772026?igsh=aTg3dzJ3cTRvd255"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-primary-foreground/10 rounded-lg hover:bg-secondary hover:text-secondary-foreground transition-all duration-200"
+                aria-label="Instagram"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6 17.25h-3.75v-3.75h3.75v3.75zm-1.875-5.625h-3.75V8.625h3.75v2.625zm-6.375 5.625H6v-9h3.75v9zm-1.875-11.25c-1.125 0-2.25.375-3 1.125-.75.75-1.125 1.875-1.125 3 0 1.125.375 2.25 1.125 3 1.125 1.125 2.875 1.125 3 1.125s1.875 0 3-1.125c.75-.75 1.125-1.875 1.125-3 0-1.125-.375-2.25-1.125-3-1.125-.75-2.875-1.125-3-1.125z"/>
+                </svg>
+              </a>
+</a>
               </li>
               <li className="flex items-start gap-3 text-sm">
                 <Mail size={18} className="text-secondary mt-0.5 flex-shrink-0" />
                 <a href={`mailto:${t('contactInfo.email')}`} className="text-primary-foreground/80 hover:text-secondary transition-colors break-all">
                   {t('contactInfo.email')}
-                </a>
+                              <a
+                href="https://www.instagram.com/hon772026?igsh=aTg3dzJ3cTRvd255"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-primary-foreground/10 rounded-lg hover:bg-secondary hover:text-secondary-foreground transition-all duration-200"
+                aria-label="Instagram"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6 17.25h-3.75v-3.75h3.75v3.75zm-1.875-5.625h-3.75V8.625h3.75v2.625zm-6.375 5.625H6v-9h3.75v9zm-1.875-11.25c-1.125 0-2.25.375-3 1.125-.75.75-1.125 1.875-1.125 3 0 1.125.375 2.25 1.125 3 1.125 1.125 2.875 1.125 3 1.125s1.875 0 3-1.125c.75-.75 1.125-1.875 1.125-3 0-1.125-.375-2.25-1.125-3-1.125-.75-2.875-1.125-3-1.125z"/>
+                </svg>
+              </a>
+</a>
               </li>
               <li className="flex items-start gap-3 text-sm">
                 <MapPin size={18} className="text-secondary mt-0.5 flex-shrink-0" />
@@ -150,7 +172,18 @@ const Footer = () => {
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/>
                 </svg>
+                            <a
+                href="https://www.instagram.com/hon772026?igsh=aTg3dzJ3cTRvd255"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-primary-foreground/10 rounded-lg hover:bg-secondary hover:text-secondary-foreground transition-all duration-200"
+                aria-label="Instagram"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6 17.25h-3.75v-3.75h3.75v3.75zm-1.875-5.625h-3.75V8.625h3.75v2.625zm-6.375 5.625H6v-9h3.75v9zm-1.875-11.25c-1.125 0-2.25.375-3 1.125-.75.75-1.125 1.875-1.125 3 0 1.125.375 2.25 1.125 3 1.125 1.125 2.875 1.125 3 1.125s1.875 0 3-1.125c.75-.75 1.125-1.875 1.125-3 0-1.125-.375-2.25-1.125-3-1.125-.75-2.875-1.125-3-1.125z"/>
+                </svg>
               </a>
+</a>
               <a
                 href="https://www.facebook.com/share/1CvWgxJYn2/"
                 target="_blank"
@@ -161,7 +194,18 @@ const Footer = () => {
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
+                            <a
+                href="https://www.instagram.com/hon772026?igsh=aTg3dzJ3cTRvd255"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-primary-foreground/10 rounded-lg hover:bg-secondary hover:text-secondary-foreground transition-all duration-200"
+                aria-label="Instagram"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6 17.25h-3.75v-3.75h3.75v3.75zm-1.875-5.625h-3.75V8.625h3.75v2.625zm-6.375 5.625H6v-9h3.75v9zm-1.875-11.25c-1.125 0-2.25.375-3 1.125-.75.75-1.125 1.875-1.125 3 0 1.125.375 2.25 1.125 3 1.125 1.125 2.875 1.125 3 1.125s1.875 0 3-1.125c.75-.75 1.125-1.875 1.125-3 0-1.125-.375-2.25-1.125-3-1.125-.75-2.875-1.125-3-1.125z"/>
+                </svg>
               </a>
+</a>
               <a
                 href="https://youtube.com/c/HeavenOnEarthMinistries"
                 target="_blank"
@@ -172,7 +216,18 @@ const Footer = () => {
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                 </svg>
+                            <a
+                href="https://www.instagram.com/hon772026?igsh=aTg3dzJ3cTRvd255"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-primary-foreground/10 rounded-lg hover:bg-secondary hover:text-secondary-foreground transition-all duration-200"
+                aria-label="Instagram"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6 17.25h-3.75v-3.75h3.75v3.75zm-1.875-5.625h-3.75V8.625h3.75v2.625zm-6.375 5.625H6v-9h3.75v9zm-1.875-11.25c-1.125 0-2.25.375-3 1.125-.75.75-1.125 1.875-1.125 3 0 1.125.375 2.25 1.125 3 1.125 1.125 2.875 1.125 3 1.125s1.875 0 3-1.125c.75-.75 1.125-1.875 1.125-3 0-1.125-.375-2.25-1.125-3-1.125-.75-2.875-1.125-3-1.125z"/>
+                </svg>
               </a>
+</a>
             </div>
           </div>
         </div>
