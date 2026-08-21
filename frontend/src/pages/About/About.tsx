@@ -118,14 +118,14 @@ const About = () => {
                 viewport={{ once: true }}
                 className="group relative"
               >
-                <div className="h-full bg-white/10 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/20 hover:border-gold/60 transition-all duration-500 flex flex-col shadow-2xl">
-                  <div className="flex items-center gap-6 mb-8">
-                    <div className="p-4 bg-gold/20 rounded-2xl group-hover:bg-gold transition-colors duration-500">
-                      <mission.icon className="h-10 w-10 text-gold group-hover:text-navy" />
+                <div className="h-full bg-white p-8 md:p-10 rounded-3xl border border-gold/30 hover:border-gold shadow-2xl transition-all duration-500 flex flex-col">
+                  <div className="flex items-center gap-6 mb-6">
+                    <div className="p-4 bg-amber-100 rounded-2xl group-hover:bg-gold transition-colors duration-500">
+                      <mission.icon className="h-8 w-8 text-amber-700 group-hover:text-white" />
                     </div>
-                    <h3 className="text-3xl md:text-4xl font-bold text-white font-heading">{t('mission.title')}</h3>
+                    <h3 className="text-3xl md:text-4xl font-bold text-slate-900 font-heading">{t('mission.title')}</h3>
                   </div>
-                  <p className="text-white text-lg md:text-xl leading-relaxed font-sans font-normal not-italic flex-grow">
+                  <p className="text-slate-700 text-base md:text-lg leading-relaxed font-sans font-normal flex-grow">
                     {t('mission.description')}
                   </p>
                 </div>
@@ -138,20 +138,22 @@ const About = () => {
                 viewport={{ once: true }}
                 className="group relative"
               >
-                <div className="h-full bg-white/10 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/20 hover:border-gold/60 transition-all duration-500 flex flex-col shadow-2xl">
-                  <div className="flex items-center gap-6 mb-8">
-                    <div className="p-4 bg-gold/20 rounded-2xl group-hover:bg-gold transition-colors duration-500">
-                      <vision.icon className="h-10 w-10 text-gold group-hover:text-navy" />
+                <div className="h-full bg-white p-8 md:p-10 rounded-3xl border border-gold/30 hover:border-gold shadow-2xl transition-all duration-500 flex flex-col">
+                  <div className="flex items-center gap-6 mb-6">
+                    <div className="p-4 bg-amber-100 rounded-2xl group-hover:bg-gold transition-colors duration-500">
+                      <vision.icon className="h-8 w-8 text-amber-700 group-hover:text-white" />
                     </div>
-                    <h3 className="text-3xl md:text-4xl font-bold text-white font-heading">{t('vision.title')}</h3>
+                    <h3 className="text-3xl md:text-4xl font-bold text-slate-900 font-heading">{t('vision.title')}</h3>
                   </div>
-                  <div className="space-y-4 text-white text-lg md:text-xl leading-relaxed font-sans font-normal not-italic flex-grow">
+                  <div className="space-y-4 text-slate-700 text-base md:text-lg leading-relaxed font-sans font-normal flex-grow">
                     <p>{t('vision.intro')}</p>
-                    <div className="bible-verse">
-                      <p>
+                    <div className="my-4 p-5 rounded-2xl bg-amber-50/90 border-l-4 border-amber-500 shadow-sm">
+                      <p className="font-serif italic text-base md:text-lg text-slate-900 leading-relaxed mb-2">
                         {t('vision.verseText')}
                       </p>
-                      <span className="bible-verse-ref">— {t('vision.verseRef')}</span>
+                      <span className="block text-right font-sans font-bold text-xs uppercase tracking-widest text-amber-700">
+                        — {t('vision.verseRef')}
+                      </span>
                     </div>
                     <p>{t('vision.conclusion')}</p>
                   </div>

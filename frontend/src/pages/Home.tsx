@@ -193,16 +193,16 @@ const Home = () => {
                 viewport={{ once: true }}
                 className="group"
               >
-                <div className="bg-white/10 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/20 hover:border-gold/60 transition-all duration-500 h-full flex flex-col shadow-2xl">
-                  <div className="w-16 h-16 bg-gold/20 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gold transition-colors duration-500">
-                    <svg className="w-8 h-8 text-gold group-hover:text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="bg-white p-8 md:p-10 rounded-3xl border border-gold/30 hover:border-gold shadow-2xl transition-all duration-500 h-full flex flex-col">
+                  <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-gold transition-colors duration-500">
+                    <svg className="w-7 h-7 text-amber-700 group-hover:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="12" r="10" />
                       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                       <path d="M2 12h20" />
                     </svg>
                   </div>
-                  <h3 className="font-heading text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight">{t('mission.title')}</h3>
-                  <p className="text-white text-lg md:text-xl leading-relaxed font-sans font-normal not-italic">{t('mission.description')}</p>
+                  <h3 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-5 tracking-tight">{t('mission.title')}</h3>
+                  <p className="text-slate-700 text-base md:text-lg leading-relaxed font-sans font-normal">{t('mission.description')}</p>
                 </div>
               </motion.div>
 
@@ -213,21 +213,23 @@ const Home = () => {
                 viewport={{ once: true }}
                 className="group"
               >
-                <div className="bg-white/10 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/20 hover:border-gold/60 transition-all duration-500 h-full flex flex-col shadow-2xl">
-                  <div className="w-16 h-16 bg-gold/20 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gold transition-colors duration-500">
-                    <svg className="w-8 h-8 text-gold group-hover:text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="bg-white p-8 md:p-10 rounded-3xl border border-gold/30 hover:border-gold shadow-2xl transition-all duration-500 h-full flex flex-col">
+                  <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-gold transition-colors duration-500">
+                    <svg className="w-7 h-7 text-amber-700 group-hover:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                       <circle cx="12" cy="12" r="3" />
                     </svg>
                   </div>
-                  <h3 className="font-heading text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight">{t('vision.title')}</h3>
-                  <div className="space-y-4 text-white text-lg md:text-xl leading-relaxed font-sans font-normal not-italic">
+                  <h3 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-5 tracking-tight">{t('vision.title')}</h3>
+                  <div className="space-y-4 text-slate-700 text-base md:text-lg leading-relaxed font-sans font-normal">
                     <p>{t('vision.intro')}</p>
-                    <div className="bible-verse">
-                      <p>
+                    <div className="my-4 p-5 rounded-2xl bg-amber-50/90 border-l-4 border-amber-500 shadow-sm">
+                      <p className="font-serif italic text-base md:text-lg text-slate-900 leading-relaxed mb-2">
                         {t('vision.verseText')}
                       </p>
-                      <span className="bible-verse-ref">— {t('vision.verseRef')}</span>
+                      <span className="block text-right font-sans font-bold text-xs uppercase tracking-widest text-amber-700">
+                        — {t('vision.verseRef')}
+                      </span>
                     </div>
                     <p>{t('vision.conclusion')}</p>
                   </div>
