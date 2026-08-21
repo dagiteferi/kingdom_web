@@ -25,7 +25,7 @@ from app.config import settings
 # Module-level Groq client — instantiated once, reused across all invocations
 # ---------------------------------------------------------------------------
 _llm = ChatGroq(
-    model="llama3-70b-8192",
+    model="groq/compound",
     api_key=settings.groq_api_key,
     temperature=0.7,
 )
