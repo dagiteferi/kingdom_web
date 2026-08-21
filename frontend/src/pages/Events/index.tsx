@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Clock } from 'lucide-react';
-import { format } from 'date-fns';
+import { safeFormatDate } from '@/utils/date';
 import EventCard from '@/components/EventCard';
 import { getEvents, Event } from '@/services/api';
 import { getCache, setCache } from '@/lib/cache';
@@ -53,10 +53,18 @@ const Events = () => {
 
   const formatEventTime = (timeStr: string) => {
     if (!timeStr) return '';
-    const [hours, minutes] = timeStr.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours, 10), parseInt(minutes, 10));
-    return format(date, 'p'); // e.g., 10:00 AM
+    try {
+      const parts = timeStr.split(':');
+      if (parts.length < 2) return timeStr;
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+      if (isNaN(hours) || isNaN(minutes)) return timeStr;
+      const date = new Date();
+      date.setHours(hours, minutes, 0, 0);
+      return safeFormatDate(date, 'p');
+    } catch {
+      return timeStr;
+    }
   };
 
   return (
@@ -162,7 +170,7 @@ const Events = () => {
                   >
                     <EventCard
                       title={title}
-                      date={format(new Date(event.event_date), 'E, MMM d')}
+                      date={safeFormatDate(event.event_date, 'E, MMM d', event.event_date)}
                       time={formatEventTime(event.start_time)}
                       location={location}
                       description={description}

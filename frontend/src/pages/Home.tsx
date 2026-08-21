@@ -11,7 +11,7 @@ import TestimonialSection from '@/components/TestimonialSection';
 import SeoHead from '@/components/SeoHead';
 import { getMinistries, Ministry, getEvents, Event } from '@/services/api';
 import { toast } from 'sonner';
-import { staleWhileRevalidate } from '@/lib/cache';
+import { safeFormatDate, safeParseDate } from '@/utils/date';
 import { format } from 'date-fns';
 
 const MINISTRIES_CACHE_KEY = 'featured_ministries';
@@ -67,10 +67,19 @@ const Home = () => {
   }, [t]);
 
   const formatEventTime = (timeStr: string) => {
-    const [hours, minutes] = timeStr.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours, 10), parseInt(minutes, 10));
-    return format(date, 'p'); // e.g., 10:00 AM
+    if (!timeStr) return '';
+    try {
+      const parts = timeStr.split(':');
+      if (parts.length < 2) return timeStr;
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+      if (isNaN(hours) || isNaN(minutes)) return timeStr;
+      const date = new Date();
+      date.setHours(hours, minutes, 0, 0);
+      return format(date, 'p');
+    } catch {
+      return timeStr;
+    }
   };
 
   return (
@@ -315,7 +324,7 @@ const Home = () => {
                   <EventCard
                     key={event.id}
                     title={title}
-                    date={format(new Date(event.event_date), 'E, MMM d')}
+                    date={safeFormatDate(event.event_date, 'E, MMM d', event.event_date)}
                     time={formatEventTime(event.start_time)}
                     location={location}
                     description={description}
