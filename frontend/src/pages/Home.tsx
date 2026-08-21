@@ -11,6 +11,7 @@ import TestimonialSection from '@/components/TestimonialSection';
 import SeoHead from '@/components/SeoHead';
 import { getMinistries, Ministry, getEvents, Event } from '@/services/api';
 import { toast } from 'sonner';
+import { staleWhileRevalidate } from '@/lib/cache';
 import { safeFormatDate, safeParseDate } from '@/utils/date';
 import { format } from 'date-fns';
 
