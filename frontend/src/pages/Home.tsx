@@ -153,11 +153,13 @@ const Home = () => {
                     {t('welcome.ourCalling')}
                   </div>
                   <h3 className="text-3xl font-bold text-navy mb-6 underline decoration-gold/30">“{t('welcome.nameIsMission')}”</h3>
-                  <div className="space-y-4 text-navy/80 text-xl font-serif italic mb-8">
-                    <p className="leading-relaxed">
-                      {i18n.language === 'am' ? '“መንግሥትህ ትምጣ፤ ፈቃድህ በሰማይ እንደ ሆነች እንዲሁ በምድር ትሁን።”' : '“Thy kingdom come. Thy will be done in earth, as it is in heaven.”'}
+                  <div className="bible-verse max-w-2xl mx-auto my-6 text-navy text-left">
+                    <p className="text-xl md:text-2xl font-serif italic leading-relaxed tracking-wide text-navy">
+                      {i18n.language === 'am' ? '“መንግሥትህ ትምጣ፤ ፈቃድህ በሰማይ እንደ ሆነች እንዲሁ በምድር ትሁን።”' : '“Your kingdom come, Your will be done, on earth as it is in heaven.”'}
                     </p>
-                    <p className="text-gold font-sans font-bold not-italic">— {i18n.language === 'am' ? 'ማቴዎስ 6:10' : 'Matthew 6:10 (KJV)'}</p>
+                    <span className="bible-verse-ref">
+                      — {i18n.language === 'am' ? 'ማቴዎስ 6:10' : 'Matthew 6:10'}
+                    </span>
                   </div>
                   <div className="h-px w-full bg-gold/20 mb-8" />
                   <p className="text-muted-foreground text-lg leading-relaxed font-light">
@@ -177,7 +179,10 @@ const Home = () => {
               </div>
             </motion.div>
           </div>
-        </section>        <section className="bg-navy py-24 relative overflow-hidden">
+        </section>
+
+        {/* Mission & Vision Section */}
+        <section className="bg-navy py-24 relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
@@ -188,7 +193,7 @@ const Home = () => {
                 viewport={{ once: true }}
                 className="group"
               >
-                <div className="bg-white/5 backdrop-blur-md p-10 rounded-3xl border border-white/10 hover:border-gold/50 transition-all duration-500 h-full flex flex-col">
+                <div className="bg-white/10 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/20 hover:border-gold/60 transition-all duration-500 h-full flex flex-col shadow-2xl">
                   <div className="w-16 h-16 bg-gold/20 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gold transition-colors duration-500">
                     <svg className="w-8 h-8 text-gold group-hover:text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="12" r="10" />
@@ -196,8 +201,8 @@ const Home = () => {
                       <path d="M2 12h20" />
                     </svg>
                   </div>
-                  <h3 className="font-heading text-4xl font-bold text-white mb-6 tracking-tight">{t('mission.title')}</h3>
-                  <p className="text-primary-foreground/80 text-xl leading-relaxed font-light italic">{t('mission.description')}</p>
+                  <h3 className="font-heading text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight">{t('mission.title')}</h3>
+                  <p className="text-white text-lg md:text-xl leading-relaxed font-sans font-normal not-italic">{t('mission.description')}</p>
                 </div>
               </motion.div>
 
@@ -208,15 +213,24 @@ const Home = () => {
                 viewport={{ once: true }}
                 className="group"
               >
-                <div className="bg-white/5 backdrop-blur-md p-10 rounded-3xl border border-white/10 hover:border-gold/50 transition-all duration-500 h-full flex flex-col">
+                <div className="bg-white/10 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/20 hover:border-gold/60 transition-all duration-500 h-full flex flex-col shadow-2xl">
                   <div className="w-16 h-16 bg-gold/20 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gold transition-colors duration-500">
                     <svg className="w-8 h-8 text-gold group-hover:text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                       <circle cx="12" cy="12" r="3" />
                     </svg>
                   </div>
-                  <h3 className="font-heading text-4xl font-bold text-white mb-6 tracking-tight">{t('vision.title')}</h3>
-                  <p className="text-primary-foreground/80 text-xl leading-relaxed font-light italic">{t('vision.description')}</p>
+                  <h3 className="font-heading text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight">{t('vision.title')}</h3>
+                  <div className="space-y-4 text-white text-lg md:text-xl leading-relaxed font-sans font-normal not-italic">
+                    <p>{t('vision.intro')}</p>
+                    <div className="bible-verse">
+                      <p>
+                        {t('vision.verseText')}
+                      </p>
+                      <span className="bible-verse-ref">— {t('vision.verseRef')}</span>
+                    </div>
+                    <p>{t('vision.conclusion')}</p>
+                  </div>
                 </div>
               </motion.div>
             </div>

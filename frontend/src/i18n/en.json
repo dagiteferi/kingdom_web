@@ -32,7 +32,11 @@
   },
   "vision": {
     "title": "Our Vision",
-    "description": "Our vision is to see the reality of heaven manifested on earth through transformed lives, restored families, and communities aligned with the will of God, as declared in Matthew 6:10 — “Your kingdom come, Your will be done, on earth as it is in heaven.” We seek to build strong, spirit-led families that reflect God’s heart, and function as agents of transformation in the world. Our ultimate vision is a global movement of believers who embody the culture of heaven—where love reigns, faith overcomes, truth prevails, and God’s presence is experienced—until the earth reflects His glory."
+    "description": "Our vision is to see the reality of heaven manifested on earth through transformed lives, restored families, and communities aligned with the will of God, as declared in Matthew 6:10 — “Your kingdom come, Your will be done, on earth as it is in heaven.” We seek to build strong, spirit-led families that reflect God’s heart, and function as agents of transformation in the world. Our ultimate vision is a global movement of believers who embody the culture of heaven—where love reigns, faith overcomes, truth prevails, and God’s presence is experienced—until the earth reflects His glory.",
+    "intro": "Our vision is to see the reality of heaven manifested on earth through transformed lives, restored families, and communities aligned with the will of God, as declared in:",
+    "verseText": "“Your kingdom come, Your will be done, on earth as it is in heaven.”",
+    "verseRef": "Matthew 6:10",
+    "conclusion": "We seek to build strong, spirit-led families that reflect God’s heart, and function as agents of transformation in the world. Our ultimate vision is a global movement of believers who embody the culture of heaven—where love reigns, faith overcomes, truth prevails, and God’s presence is experienced—until the earth reflects His glory."
   },
   "ministries": {
     "title": "Our Ministries",

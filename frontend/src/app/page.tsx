@@ -16,10 +16,12 @@ export default function Home() {
       <section className="bg-gradient-to-r from-primary to-primary/90 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Heaven on Earth Kingdom Family Ministries</h1>
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto italic">
-            "Your kingdom come, your will be done, on earth as it is in heaven."
-            <span className="block mt-2">— Matthew 6:10</span>
-          </p>
+          <div className="bible-verse max-w-2xl mx-auto text-left">
+            <p>
+              "Your kingdom come, Your will be done, on earth as it is in heaven."
+            </p>
+            <span className="bible-verse-ref">— Matthew 6:10</span>
+          </div>
           <div className="mt-8 space-x-4">
             <Button className="bg-white text-primary hover:bg-gray-100 px-8 py-6 text-lg">
               Join Our Family

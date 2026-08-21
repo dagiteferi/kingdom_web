@@ -118,14 +118,14 @@ const About = () => {
                 viewport={{ once: true }}
                 className="group relative"
               >
-                <div className="h-full bg-white/5 backdrop-blur-sm p-10 rounded-3xl border border-white/10 hover:border-gold/50 transition-all duration-500 flex flex-col">
+                <div className="h-full bg-white/10 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/20 hover:border-gold/60 transition-all duration-500 flex flex-col shadow-2xl">
                   <div className="flex items-center gap-6 mb-8">
                     <div className="p-4 bg-gold/20 rounded-2xl group-hover:bg-gold transition-colors duration-500">
                       <mission.icon className="h-10 w-10 text-gold group-hover:text-navy" />
                     </div>
-                    <h3 className="text-4xl font-bold text-white font-heading">{t('mission.title')}</h3>
+                    <h3 className="text-3xl md:text-4xl font-bold text-white font-heading">{t('mission.title')}</h3>
                   </div>
-                  <p className="text-primary-foreground/80 text-xl leading-relaxed font-light flex-grow">
+                  <p className="text-white text-lg md:text-xl leading-relaxed font-sans font-normal not-italic flex-grow">
                     {t('mission.description')}
                   </p>
                 </div>
@@ -138,16 +138,23 @@ const About = () => {
                 viewport={{ once: true }}
                 className="group relative"
               >
-                <div className="h-full bg-white/5 backdrop-blur-sm p-10 rounded-3xl border border-white/10 hover:border-gold/50 transition-all duration-500 flex flex-col">
+                <div className="h-full bg-white/10 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/20 hover:border-gold/60 transition-all duration-500 flex flex-col shadow-2xl">
                   <div className="flex items-center gap-6 mb-8">
                     <div className="p-4 bg-gold/20 rounded-2xl group-hover:bg-gold transition-colors duration-500">
                       <vision.icon className="h-10 w-10 text-gold group-hover:text-navy" />
                     </div>
-                    <h3 className="text-4xl font-bold text-white font-heading">{t('vision.title')}</h3>
+                    <h3 className="text-3xl md:text-4xl font-bold text-white font-heading">{t('vision.title')}</h3>
                   </div>
-                  <p className="text-primary-foreground/80 text-xl leading-relaxed font-light flex-grow">
-                    {t('vision.description')}
-                  </p>
+                  <div className="space-y-4 text-white text-lg md:text-xl leading-relaxed font-sans font-normal not-italic flex-grow">
+                    <p>{t('vision.intro')}</p>
+                    <div className="bible-verse">
+                      <p>
+                        {t('vision.verseText')}
+                      </p>
+                      <span className="bible-verse-ref">— {t('vision.verseRef')}</span>
+                    </div>
+                    <p>{t('vision.conclusion')}</p>
+                  </div>
                 </div>
               </motion.div>
             </div>
