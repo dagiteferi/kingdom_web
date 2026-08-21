@@ -285,7 +285,7 @@ export default function AdminGallery() {
                                         onChange={(e) => setFile(e.target.files?.[0] || null)}
                                         required
                                     />
-                                    <p className="text-xs text-muted-foreground">Select an image or video to upload from your device.</p>
+                                    <p className="text-xs text-muted-foreground">Supported formats: Images (JPEG, PNG, WEBP, GIF, SVG) and Videos (MP4, WEBM, MOV).</p>
                                 </div>
                             ) : (
                                 <div className="space-y-2">
