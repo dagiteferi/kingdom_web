@@ -3,7 +3,7 @@ Heaven on Earth CMS Backend — Response Formatter Node
 
 Builds the final LLM response by combining the language-specific system
 prompt, conversation history, and optional RAG context, then calls Groq
-``llama-3.3-70b-versatile`` and appends the result to ``state["messages"]``.
+``llama3-70b-8192`` and appends the result to ``state["messages"]``.
 
 References
 ----------
@@ -25,7 +25,7 @@ from app.config import settings
 # Module-level Groq client — instantiated once, reused across all invocations
 # ---------------------------------------------------------------------------
 _llm = ChatGroq(
-    model="llama-3.3-70b-versatile",
+    model="llama3-70b-8192",
     api_key=settings.groq_api_key,
     temperature=0.7,
 )
