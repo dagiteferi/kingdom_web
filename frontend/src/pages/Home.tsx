@@ -110,7 +110,7 @@ const Home = () => {
               className="max-w-4xl mx-auto"
             >
               <motion.img
-                src={logo || '/logo.png'}
+                src={logo}
                 alt="Heaven on Earth Kingdom Family Ministries"
                 className="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6 rounded-full shadow-gold-glow object-cover bg-white/10"
                 initial={{ scale: 0.8, opacity: 0 }}
@@ -118,9 +118,8 @@ const Home = () => {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 onError={(e) => {
                   const target = e.currentTarget as HTMLImageElement;
-                  if (target.src !== window.location.origin + '/logo.png') {
-                    target.src = '/logo.png';
-                  }
+                  target.onerror = null;
+                  target.src = '/logo.png';
                 }}
               />
 
