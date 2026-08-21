@@ -32,9 +32,15 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <img 
-              src={logo} 
+              src={logo || '/logo.png'} 
               alt="Heaven on Earth Kingdom Family Ministries Logo" 
-              className="h-12 w-12 md:h-14 md:w-14 rounded-full transition-transform duration-300 group-hover:scale-105"
+              className="h-12 w-12 md:h-14 md:w-14 rounded-full object-cover transition-transform duration-300 group-hover:scale-105"
+              onError={(e) => {
+                const target = e.currentTarget as HTMLImageElement;
+                if (target.src !== window.location.origin + '/logo.png') {
+                  target.src = '/logo.png';
+                }
+              }}
             />
             <div className="hidden sm:block">
               <h1 className="font-heading text-sm md:text-base font-bold text-primary leading-tight">
