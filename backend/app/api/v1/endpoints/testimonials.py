@@ -42,6 +42,7 @@ async def list_testimonials(
     status_filter: Optional[str] = Query(None, alias="status"),
     category: Optional[str] = None,
     is_featured: Optional[bool] = None,
+    published_only: Optional[bool] = Query(None, alias="published_only"),
     search: Optional[str] = None,
 ):
     """
@@ -56,15 +57,12 @@ async def list_testimonials(
     response_item_model = TestimonialResponse if current_admin else TestimonialPublic
     
     # For public access, always filter by published status
-    published_only_filter = True
+    pub_filter = published_only if published_only is not None else not bool(current_admin)
     
     # Admins can optionally filter by status and see all testimonials
     if current_admin:
-        published_only_filter = None # Admins can see unpublished/unapproved
         # If an admin explicitly requests a status, use it
         if status_filter:
-            # If status_filter is provided, we don't want to override it with "approved"
-            # The CRUD function will handle filtering by this status.
             pass
         else:
             # If no status filter is provided by admin, default to all for admin view
@@ -81,7 +79,7 @@ async def list_testimonials(
         category=category,
         is_featured=is_featured,
         search=search,
-        published_only=published_only_filter, # Pass the new filter
+        published_only=pub_filter, # Pass the new filter
     )
     
     # Create PaginatedResponse with the appropriate item model
