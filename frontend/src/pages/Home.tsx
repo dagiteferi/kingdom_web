@@ -119,7 +119,8 @@ const Home = () => {
                 onError={(e) => {
                   const target = e.currentTarget as HTMLImageElement;
                   target.onerror = null;
-                  target.src = '/logo.png';
+                  // Fallback to the logo that's already imported as a module
+                  target.src = logo;
                 }}
               />
 
