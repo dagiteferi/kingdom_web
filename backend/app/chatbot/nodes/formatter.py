@@ -5,7 +5,7 @@ Builds the final LLM response by combining the language-specific system
 prompt, conversation history, and optional RAG context, then calls Groq
 and appends the result to ``state["messages"]``.
 
-Uses ``llama-3.1-8b-instant`` as primary (high TPM limit) with
+Uses ``llama3-8b-8192`` as primary (high TPM limit) with
 ``llama3-70b-8192`` as fallback, and exponential-backoff retry on 429
 rate-limit errors.
 
@@ -35,9 +35,9 @@ logger = logging.getLogger(__name__)
 # Groq clients — primary (high TPM) + fallback (lower TPM but more capable)
 # ---------------------------------------------------------------------------
 
-# llama-3.1-8b-instant: ~1M TPM on free tier — handles most requests easily
+# llama3-8b-8192: fast, high TPM limit — handles most requests easily
 _llm_primary = ChatGroq(
-    model="llama-3.1-8b-instant",
+    model="llama3-8b-8192",
     api_key=settings.groq_api_key,
     temperature=0.7,
 )
