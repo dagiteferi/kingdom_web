@@ -26,33 +26,66 @@ from app.config import settings
 _EXIT_PATTERN = re.compile(r"\b(cancel|stop|exit|quit)\b", re.IGNORECASE)
 
 # ---------------------------------------------------------------------------
+# Keyword-based pre-classification — catches obvious intents without LLM call
+# ---------------------------------------------------------------------------
+_TESTIMONY_PATTERN = re.compile(
+    r"\b(testimony|testify|testimon|share\s+(my\s+)?(story|experience|testimony)|"
+    r"ምስክርነት|ምስክርነቴን)\b",
+    re.IGNORECASE,
+)
+_PRAYER_PATTERN = re.compile(
+    r"\b(pray(er)?(\s+request)?|prayer\s+request|submit\s+a?\s+pray|"
+    r"ጸሎት|ጸሎቴን|ጸሎት\s+ጥያቄ)\b",
+    re.IGNORECASE,
+)
+_PARTNERSHIP_PATTERN = re.compile(
+    r"\b(partner(ship)?|volunteer|donate|donat(e|ion)|give\s+financ|financial(ly)?|"
+    r"material\s+support|አጋርነት|ድጋፍ)\b",
+    re.IGNORECASE,
+)
+
+# ---------------------------------------------------------------------------
 # Intent classification prompt
 # ---------------------------------------------------------------------------
 _CLASSIFICATION_PROMPT = """You are an intent classifier for a church chatbot.
 Classify the user message into exactly ONE of these intents:
-- testimony (user wants to share a personal testimony)
+- testimony (user wants to share a personal testimony or story of faith)
 - prayer (user wants to submit a prayer request)
-- partnership (user wants to explore partnership or give financially)
-- qa (user is asking a question about the church)
+- partnership (user wants to explore partnership, volunteer, or give financially)
+- qa (user is asking a question about the church or ministry)
 - unknown (unclear or off-topic)
 
-Respond with ONLY one word from the list above. No punctuation, no explanation.
+IMPORTANT: Respond with ONLY one lowercase word from the list above. No punctuation, no explanation, nothing else.
 
 User message: {message}
 Intent:"""
+
+
+def _keyword_classify(text: str) -> str | None:
+    """
+    Fast keyword-based pre-classification before calling the LLM.
+
+    Returns the intent string if a confident match is found, else None.
+    """
+    if _TESTIMONY_PATTERN.search(text):
+        return "testimony"
+    if _PRAYER_PATTERN.search(text):
+        return "prayer"
+    if _PARTNERSHIP_PATTERN.search(text):
+        return "partnership"
+    return None
 
 
 def intent_router_node(state: AgentState) -> AgentState:
     """
     LangGraph node: route the conversation based on detected user intent.
 
+    First tries fast keyword matching, then falls back to Groq LLM
+    classification if no keyword match is found.
+
     If an action flow is currently active (``state["flow"] != "idle"``) and
     the user has NOT typed an exit keyword, the intent is kept equal to the
     active flow name (continuing slot-filling).
-
-    Otherwise the last user message is sent to Groq ``llama-3.1-8b-instant``
-    for zero-shot intent classification, and the result is stored in
-    ``state["intent"]``.
 
     Parameters
     ----------
@@ -77,7 +110,13 @@ def intent_router_node(state: AgentState) -> AgentState:
     if current_flow != "idle" and not _EXIT_PATTERN.search(last_user_content):
         return {**state, "intent": current_flow}
 
-    # Otherwise → classify with Groq
+    # Try keyword classification first (no LLM needed)
+    keyword_intent = _keyword_classify(last_user_content)
+    if keyword_intent:
+        new_flow = "idle" if _EXIT_PATTERN.search(last_user_content) else current_flow
+        return {**state, "intent": keyword_intent, "flow": new_flow}
+
+    # Fall back to Groq LLM classification
     llm = ChatGroq(
         model="groq/compound-mini",
         api_key=settings.groq_api_key,
@@ -88,9 +127,12 @@ def intent_router_node(state: AgentState) -> AgentState:
     response = llm.invoke(prompt)
     raw_intent = str(response.content).strip().lower()
 
+    # Extract just the first word in case the model returns extra text
+    first_word = raw_intent.split()[0].rstrip(".,!?") if raw_intent.split() else ""
+
     # Normalise to one of the valid intents
     valid_intents = {"testimony", "prayer", "partnership", "qa", "unknown"}
-    intent = raw_intent if raw_intent in valid_intents else "unknown"
+    intent = first_word if first_word in valid_intents else "unknown"
 
     # If user typed an exit keyword, reset the flow to idle
     new_flow = "idle" if _EXIT_PATTERN.search(last_user_content) else current_flow
