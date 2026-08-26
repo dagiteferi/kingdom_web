@@ -18,6 +18,99 @@ const QUICK_ACTIONS_AM = [
   { label: '🤝 አጋርነት', value: 'ከቤተ ክርስቲያን ጋር ለመተባበር ፍላጎት አለኝ' },
 ];
 
+// Category options for testimony
+const CATEGORY_OPTIONS_EN = [
+  { label: '💊 Healing', value: 'healing' },
+  { label: '✝️ Salvation', value: 'salvation' },
+  { label: '🙌 Provision', value: 'provision' },
+  { label: '⛓️ Deliverance', value: 'deliverance' },
+  { label: '📖 General', value: 'general' },
+];
+
+const CATEGORY_OPTIONS_AM = [
+  { label: '💊 ፈውስ', value: 'healing' },
+  { label: '✝️ ድኅነት', value: 'salvation' },
+  { label: '🙌 አቅርቦት', value: 'provision' },
+  { label: '⛓️ ነፃነት', value: 'deliverance' },
+  { label: '📖 አጠቃላይ', value: 'general' },
+];
+
+// Partnership type options
+const PARTNERSHIP_TYPE_OPTIONS_EN = [
+  { label: '💰 Financial', value: 'financial' },
+  { label: '🙋 Volunteer', value: 'volunteer' },
+  { label: '📦 Material', value: 'material' },
+];
+
+const PARTNERSHIP_TYPE_OPTIONS_AM = [
+  { label: '💰 ፋይናንሻል', value: 'financial' },
+  { label: '🙋 በጎ ፈቃደኛ', value: 'volunteer' },
+  { label: '📦 ቁሳቁስ', value: 'material' },
+];
+
+/** Detect what kind of quick-reply buttons to show based on last bot message */
+function detectQuickReplies(
+  lastBotMessage: string,
+  language: Language
+): { label: string; value: string }[] | null {
+  const lower = lastBotMessage.toLowerCase();
+
+  // Yes/No confirmation prompt
+  if (
+    lower.includes('reply **yes** to submit') ||
+    lower.includes('reply yes to submit') ||
+    lower.includes('አዎ** ብለው ሊልኩ') ||
+    lower.includes('please reply')
+  ) {
+    return language === 'am'
+      ? [
+          { label: '✅ አዎ — አስገባ', value: 'yes' },
+          { label: '❌ አይ — ሰርዝ', value: 'no' },
+        ]
+      : [
+          { label: '✅ Yes — Submit', value: 'yes' },
+          { label: '❌ No — Cancel', value: 'no' },
+        ];
+  }
+
+  // Category selection for testimony
+  if (
+    lower.includes('healing') &&
+    lower.includes('salvation') &&
+    lower.includes('category')
+  ) {
+    return language === 'am' ? CATEGORY_OPTIONS_AM : CATEGORY_OPTIONS_EN;
+  }
+
+  // Partnership type selection
+  if (
+    lower.includes('financial') &&
+    lower.includes('volunteer') &&
+    lower.includes('material') &&
+    (lower.includes('partner') || lower.includes('አጋርነት'))
+  ) {
+    return language === 'am' ? PARTNERSHIP_TYPE_OPTIONS_AM : PARTNERSHIP_TYPE_OPTIONS_EN;
+  }
+
+  // Anonymous prayer question
+  if (
+    lower.includes('anonymous') ||
+    lower.includes('ሳይታወቅ')
+  ) {
+    return language === 'am'
+      ? [
+          { label: '👤 አዎ — ሳይታወቅ', value: 'yes' },
+          { label: '😊 አይ — ስሜን አካትት', value: 'no' },
+        ]
+      : [
+          { label: '👤 Yes — Anonymously', value: 'yes' },
+          { label: '😊 No — Include my name', value: 'no' },
+        ];
+  }
+
+  return null;
+}
+
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -59,8 +152,19 @@ export default function ChatWidget() {
     }
   };
 
+  const handleQuickReply = (value: string) => {
+    sendMessage(value);
+  };
+
   const quickActions = language === 'am' ? QUICK_ACTIONS_AM : QUICK_ACTIONS_EN;
   const showQuickActions = messages.length <= 1 && !isLoading;
+
+  // Detect contextual quick-reply buttons from the last bot message
+  const lastBotMessage = [...messages].reverse().find((m) => m.role === 'assistant' && !m.isStreaming);
+  const contextualReplies =
+    !isLoading && lastBotMessage
+      ? detectQuickReplies(lastBotMessage.content, language)
+      : null;
 
   return (
     <>
@@ -196,7 +300,27 @@ export default function ChatWidget() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick Actions */}
+            {/* Contextual quick-reply buttons (category / yes-no / anonymous) */}
+            {contextualReplies && !showQuickActions && (
+              <div className="px-3 pb-2 flex flex-col gap-1.5 shrink-0 border-t border-border pt-2">
+                <div className="flex flex-wrap gap-1.5">
+                  {contextualReplies.map((reply, i) => (
+                    <motion.button
+                      key={reply.value}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      onClick={() => handleQuickReply(reply.value)}
+                      className="text-sm px-3 py-1.5 rounded-xl border border-secondary/60 bg-secondary/10 hover:bg-secondary/25 text-foreground font-medium transition-all duration-150 whitespace-nowrap"
+                    >
+                      {reply.label}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Initial Quick Actions */}
             {showQuickActions && (
               <QuickActions
                 actions={quickActions}

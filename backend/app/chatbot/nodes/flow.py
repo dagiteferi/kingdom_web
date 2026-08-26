@@ -150,6 +150,14 @@ async def action_flow_node(state: AgentState) -> AgentState:
         ``messages`` (possibly with a new ``AIMessage`` prompt appended).
     """
     # ------------------------------------------------------------------
+    # 0. If already awaiting confirmation, pass through unchanged so the
+    #    graph routes to confirmation_node which will read the user's reply.
+    # ------------------------------------------------------------------
+    if state.get("flow_step") == "awaiting_confirm":
+        logger.debug("action_flow_node: awaiting_confirm — passing through to confirmation")
+        return state
+
+    # ------------------------------------------------------------------
     # 1. Resolve the active flow
     # ------------------------------------------------------------------
     flow_name: str = state.get("flow") or "idle"
