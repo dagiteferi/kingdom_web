@@ -52,7 +52,6 @@ async def lifespan(app: FastAPI):
     from app.chatbot.startup import init_chatbot
     from app.chatbot.scheduler import start_scheduler, stop_scheduler
     from app.chatbot.nodes.knowledge import setup_knowledge_retrieval_node
-    from app.chatbot.nodes.submit import _http_client as chatbot_http_client
 
     knowledge_base, session_manager = await init_chatbot()
     app.state.knowledge_base = knowledge_base
@@ -79,7 +78,6 @@ async def lifespan(app: FastAPI):
         pass
 
     stop_scheduler()
-    await chatbot_http_client.aclose()
     await close_db()
 
 

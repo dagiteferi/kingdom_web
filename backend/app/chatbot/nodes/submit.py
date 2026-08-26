@@ -2,8 +2,9 @@
 Heaven on Earth CMS Backend — API Submission Node
 
 Validates the collected slot values against the appropriate Pydantic schema
-and POSTs them to the existing FastAPI backend endpoints.  Handles validation
-errors and non-2xx HTTP responses gracefully without raising exceptions.
+and writes them directly to the database via the CRUD layer.  This avoids an
+HTTP self-call (which is unreliable inside the same process) and instead
+shares the application's async DB session factory.
 
 References
 ----------
@@ -16,40 +17,20 @@ from __future__ import annotations
 
 import json
 
-import httpx
 import structlog
 from langchain_core.messages import AIMessage
 from pydantic import ValidationError
 
 from app.chatbot.session import AgentState
-from app.config import settings
+from app.crud.partnership import create_partnership
+from app.crud.prayer import create_prayer_request
+from app.crud.testimonial import create_testimonial
+from app.database import async_session_maker
 from app.schemas.partnership import PartnershipCreate
 from app.schemas.prayer import PrayerRequestCreate
 from app.schemas.testimonial import TestimonialCreate
 
 logger = structlog.get_logger(__name__)
-
-# ---------------------------------------------------------------------------
-# Module-level HTTP client singleton
-# Always use localhost for internal self-calls (works on HF Spaces and local)
-# ---------------------------------------------------------------------------
-
-_internal_base = f"http://localhost:{settings.port}"
-
-_http_client = httpx.AsyncClient(
-    base_url=_internal_base,
-    timeout=10.0,
-)
-
-# ---------------------------------------------------------------------------
-# Endpoint routing map
-# ---------------------------------------------------------------------------
-
-_ENDPOINTS: dict[str, str] = {
-    "testimony": "/api/v1/testimonials",
-    "prayer": "/api/v1/prayers",
-    "partnership": "/api/v1/partnerships",
-}
 
 # ---------------------------------------------------------------------------
 # Bilingual success / error messages
@@ -99,7 +80,7 @@ _VALIDATION_ERROR_MSG: dict[str, str] = {
     ),
 }
 
-_API_ERROR_MSG: dict[str, str] = {
+_DB_ERROR_MSG: dict[str, str] = {
     "en": (
         "😔 Something went wrong while submitting your request. "
         "Please try again later or contact us directly."
@@ -166,13 +147,11 @@ def _build_payload(flow: str, collected_fields: dict):
     cf = {k: v for k, v in collected_fields.items()}
 
     if flow == "testimony":
-        # Normalise category to lowercase
         if "category" in cf:
             cf["category"] = cf["category"].strip().lower()
         return TestimonialCreate(**cf)
 
     if flow == "prayer":
-        # Convert is_anonymous string to bool
         is_anon_raw = cf.pop("is_anonymous", "no")
         cf["is_anonymous"] = is_anon_raw.strip().lower() in {
             "yes", "true", "1", "አዎ", "አዎ።"
@@ -180,16 +159,13 @@ def _build_payload(flow: str, collected_fields: dict):
         return PrayerRequestCreate(**cf)
 
     if flow == "partnership":
-        # Normalise partnership_type to lowercase
         if "partnership_type" in cf:
             cf["partnership_type"] = cf["partnership_type"].strip().lower()
-        # Parse list fields
         cf["volunteer_areas"] = _parse_list(cf.get("volunteer_areas"))
         cf["material_items"] = _parse_list(cf.get("material_items"))
         cf["financial_commitment"] = _parse_financial_commitment(
             cf.get("financial_commitment")
         )
-        # Remove empty optional lists/dicts so they default to None in schema
         if not cf["volunteer_areas"]:
             cf["volunteer_areas"] = None
         if not cf["material_items"]:
@@ -208,14 +184,15 @@ def _build_payload(flow: str, collected_fields: dict):
 
 async def submission_node(state: AgentState) -> AgentState:
     """
-    Validate collected fields and POST to the corresponding API endpoint.
+    Validate collected fields and write them directly to the database via the
+    CRUD layer (no HTTP self-call).
 
     On validation error: appends a bilingual error message and returns state
-    unchanged (without making an HTTP call).
+    unchanged.
 
-    On HTTP 201: appends a bilingual success message and resets flow state.
+    On success: appends a bilingual success message and resets flow state.
 
-    On non-2xx: logs the error and appends a user-facing error message.
+    On database error: logs the error and appends a user-facing error message.
 
     Parameters
     ----------
@@ -232,7 +209,8 @@ async def submission_node(state: AgentState) -> AgentState:
     collected_fields: dict = dict(state.get("collected_fields") or {})
     messages = list(state.get("messages") or [])
 
-    if flow not in _ENDPOINTS:
+    _valid_flows = {"testimony", "prayer", "partnership"}
+    if flow not in _valid_flows:
         logger.warning("submission_node: unknown flow", flow=flow)
         return state
 
@@ -257,23 +235,27 @@ async def submission_node(state: AgentState) -> AgentState:
         }
 
     # ------------------------------------------------------------------
-    # 2. POST to the existing API
+    # 2. Write directly to the database via the CRUD layer
     # ------------------------------------------------------------------
-    endpoint = _ENDPOINTS[flow]
-
     try:
-        response = await _http_client.post(
-            endpoint,
-            json=payload.model_dump(mode="json"),
-        )
-    except httpx.RequestError as exc:
+        async with async_session_maker() as db:
+            async with db.begin():
+                if flow == "testimony":
+                    record = await create_testimonial(db, testimonial_in=payload)
+                elif flow == "prayer":
+                    record = await create_prayer_request(db, prayer_in=payload)
+                else:  # partnership
+                    record = await create_partnership(db, partnership_in=payload)
+
+        record_id = str(getattr(record, "id", ""))
+
+    except Exception as exc:
         logger.error(
-            "submission_api_error",
+            "submission_db_error",
             flow=flow,
             error=str(exc),
-            endpoint=endpoint,
         )
-        err_msg = _API_ERROR_MSG.get(language, _API_ERROR_MSG["en"])
+        err_msg = _DB_ERROR_MSG.get(language, _DB_ERROR_MSG["en"])
         messages.append(AIMessage(content=err_msg))
         return {
             **state,
@@ -286,40 +268,17 @@ async def submission_node(state: AgentState) -> AgentState:
         }
 
     # ------------------------------------------------------------------
-    # 3. Handle response
+    # 3. Success
     # ------------------------------------------------------------------
-    if response.status_code == 201:
-        success_map = _SUCCESS_MESSAGES.get(flow, {})
-        success_msg = success_map.get(language) or success_map.get("en", "Submitted!")
-        messages.append(AIMessage(content=success_msg))
+    success_map = _SUCCESS_MESSAGES.get(flow, {})
+    success_msg = success_map.get(language) or success_map.get("en", "Submitted!")
+    messages.append(AIMessage(content=success_msg))
 
-        logger.info(
-            "submission_success",
-            flow=flow,
-            status_code=response.status_code,
-        )
-
-        return {
-            **state,
-            "flow": "idle",
-            "flow_step": "",
-            "collected_fields": {},
-            "missing_fields": [],
-            "messages": messages,
-            "api_response": response.json() if response.content else {},
-            "error": None,
-        }
-
-    # Non-2xx response
-    logger.error(
-        "submission_api_error",
+    logger.info(
+        "submission_success",
         flow=flow,
-        status_code=response.status_code,
-        endpoint=endpoint,
-        response_text=response.text[:500],
+        record_id=record_id,
     )
-    err_msg = _API_ERROR_MSG.get(language, _API_ERROR_MSG["en"])
-    messages.append(AIMessage(content=err_msg))
 
     return {
         **state,
@@ -328,5 +287,6 @@ async def submission_node(state: AgentState) -> AgentState:
         "collected_fields": {},
         "missing_fields": [],
         "messages": messages,
-        "error": f"HTTP {response.status_code}: {response.text[:200]}",
+        "api_response": {"id": record_id},
+        "error": None,
     }
