@@ -20,7 +20,7 @@ from typing import Annotated
 
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket, WebSocketDisconnect, status
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.chatbot.agent import chatbot_graph
@@ -154,19 +154,21 @@ async def websocket_chat(websocket: WebSocket, session_id: str) -> None:
                     # Each chunk is a dict of node_name → updated_state
                     for node_name, node_state in chunk.items():
                         final_state = node_state
-                        # Stream any new AIMessage content token by token
+                        # Stream any new AIMessage content — never HumanMessage
                         messages = node_state.get("messages", [])
                         if messages:
                             last = messages[-1]
-                            content = getattr(last, "content", "")
-                            if content and content != full_response:
-                                delta = content[len(full_response):]
-                                if delta:
-                                    full_response = content
-                                    await websocket.send_json({
-                                        "message": delta,
-                                        "is_final": False,
-                                    })
+                            # Only stream content from AIMessage, not HumanMessage
+                            if isinstance(last, AIMessage):
+                                content = getattr(last, "content", "")
+                                if content and content != full_response:
+                                    delta = content[len(full_response):]
+                                    if delta:
+                                        full_response = content
+                                        await websocket.send_json({
+                                            "message": delta,
+                                            "is_final": False,
+                                        })
 
             except Exception as exc:
                 logger.error("ws_agent_error", error=str(exc), session_id=session_id)
