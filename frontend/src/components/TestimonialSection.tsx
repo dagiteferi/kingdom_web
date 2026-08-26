@@ -45,7 +45,20 @@ export default function TestimonialSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [expandedTestimonials, setExpandedTestimonials] = useState<Set<string>>(new Set());
   const { t, i18n } = useTranslation();
+
+  const toggleExpanded = (id: string) => {
+    setExpandedTestimonials(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
 
   useEffect(() => {
     const fetchPublishedTestimonials = async () => {
@@ -134,12 +147,49 @@ export default function TestimonialSection() {
                 </span>
 
                 {/* Testimonial text */}
-                <p
-                  className="relative z-10 text-xl leading-loose italic text-[#1e3a5f] mt-6 flex-grow"
-                  style={{ fontFamily: "'EB Garamond', serif" }}
-                >
-                  &quot;{i18n.language === 'am' && testimonial.content ? testimonial.content : testimonial.content}&quot;
-                </p>
+                <div className="relative z-10 mt-6 flex-grow flex flex-col">
+                  <p
+                    className="text-xl leading-loose italic text-[#1e3a5f] font-serif"
+                    style={{ 
+                      WebkitLineClamp: expandedTestimonials.has(testimonial.id) ? 'unset' : 3,
+                      WebkitBoxOrient: 'vertical',
+                      display: '-webkit-box',
+                      overflow: 'hidden',
+                      fontFamily: "'EB Garamond', serif"
+                    }}
+                  >
+                    &quot;{testimonial.content}&quot;
+                  </p>
+                  
+                  {/* Read More/Less Button */}
+                  {testimonial.content.length > 200 && (
+                    <button
+                      onClick={() => toggleExpanded(testimonial.id)}
+                      className="mt-2 text-sm font-semibold text-[#c9973a] hover:text-[#a87a2b] transition-colors flex items-center gap-1 self-start"
+                      aria-label={
+                        expandedTestimonials.has(testimonial.id) 
+                          ? 'Read less' 
+                          : 'Read more'
+                      }
+                    >
+                      {expandedTestimonials.has(testimonial.id) ? (
+                        <>
+                          <span>Read Less</span>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg>
+                        </>
+                      ) : (
+                        <>
+                          <span>Read More</span>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
 
                 {/* Reference + Emoji row */}
                 <div className="flex items-end justify-between mt-8 relative z-10">
