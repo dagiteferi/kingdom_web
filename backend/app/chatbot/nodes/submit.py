@@ -30,11 +30,14 @@ from app.schemas.testimonial import TestimonialCreate
 logger = structlog.get_logger(__name__)
 
 # ---------------------------------------------------------------------------
-# Module-level HTTP client singleton (Task 8.4)
+# Module-level HTTP client singleton
+# Always use localhost for internal self-calls (works on HF Spaces and local)
 # ---------------------------------------------------------------------------
 
+_internal_base = f"http://localhost:{settings.port}"
+
 _http_client = httpx.AsyncClient(
-    base_url=f"http://{settings.host}:{settings.port}",
+    base_url=_internal_base,
     timeout=10.0,
 )
 
@@ -274,6 +277,10 @@ async def submission_node(state: AgentState) -> AgentState:
         messages.append(AIMessage(content=err_msg))
         return {
             **state,
+            "flow": "idle",
+            "flow_step": "",
+            "collected_fields": {},
+            "missing_fields": [],
             "messages": messages,
             "error": str(exc),
         }
@@ -316,6 +323,10 @@ async def submission_node(state: AgentState) -> AgentState:
 
     return {
         **state,
+        "flow": "idle",
+        "flow_step": "",
+        "collected_fields": {},
+        "missing_fields": [],
         "messages": messages,
         "error": f"HTTP {response.status_code}: {response.text[:200]}",
     }
