@@ -110,6 +110,14 @@ class Testimonial(Base):
         nullable=True,
     )
     
+    # Submission source
+    source: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="form",
+        server_default="form",
+    )  # form, chatbot
+
     # Featured testimonial
     is_featured: Mapped[bool] = mapped_column(
         Boolean,

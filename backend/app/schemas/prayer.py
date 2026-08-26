@@ -19,6 +19,7 @@ class PrayerRequestBase(BaseModel):
     phone: Optional[str] = Field(default=None, max_length=50)
     request: str = Field(min_length=10, max_length=5000)
     is_anonymous: bool = False
+    source: str = Field(default="form", description="Submission source: 'form' or 'chatbot'")
 
 
 class PrayerRequestCreate(PrayerRequestBase):

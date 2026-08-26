@@ -24,6 +24,7 @@ class TestimonialBase(BaseModel):
         default="general",
         pattern="^(healing|salvation|provision|deliverance|general|Prayer|General)$"
     )
+    source: str = Field(default="form", description="Submission source: 'form' or 'chatbot'")
 
 
 class TestimonialCreate(TestimonialBase):

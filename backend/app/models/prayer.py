@@ -95,6 +95,14 @@ class PrayerRequest(Base):
         nullable=True,
     )
     
+    # Submission source
+    source: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="form",
+        server_default="form",
+    )  # form, chatbot
+
     # Feature on prayer wall
     is_public: Mapped[bool] = mapped_column(
         Boolean,

@@ -80,6 +80,14 @@ class Partnership(Base):
         comment="List of material items offered",
     )
     
+    # Submission source
+    source: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="form",
+        server_default="form",
+    )  # form, chatbot
+
     # Status tracking
     status: Mapped[str] = mapped_column(
         String(20),

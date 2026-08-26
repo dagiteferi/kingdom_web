@@ -149,6 +149,7 @@ def _build_payload(flow: str, collected_fields: dict):
     if flow == "testimony":
         if "category" in cf:
             cf["category"] = cf["category"].strip().lower()
+        cf["source"] = "chatbot"
         return TestimonialCreate(**cf)
 
     if flow == "prayer":
@@ -156,6 +157,7 @@ def _build_payload(flow: str, collected_fields: dict):
         cf["is_anonymous"] = is_anon_raw.strip().lower() in {
             "yes", "true", "1", "አዎ", "አዎ።"
         }
+        cf["source"] = "chatbot"
         return PrayerRequestCreate(**cf)
 
     if flow == "partnership":
@@ -172,6 +174,7 @@ def _build_payload(flow: str, collected_fields: dict):
             cf["material_items"] = None
         if cf["financial_commitment"] is None:
             del cf["financial_commitment"]
+        cf["source"] = "chatbot"
         return PartnershipCreate(**cf)
 
     raise ValueError(f"Unknown flow: {flow!r}")

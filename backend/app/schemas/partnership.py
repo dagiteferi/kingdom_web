@@ -21,6 +21,7 @@ class PartnershipBase(BaseModel):
         pattern="^(financial|volunteer|material)$"
     )
     message: Optional[str] = Field(default=None, max_length=2000)
+    source: str = Field(default="form", description="Submission source: 'form' or 'chatbot'")
 
 
 class PartnershipCreate(PartnershipBase):
