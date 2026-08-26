@@ -46,7 +46,7 @@ class TestimonyFlow(BaseFlow):
                 name="content",
                 required=True,
                 prompt_key="testimony_content",
-                validator=lambda v: len(v.strip()) >= 50,
+                validator=lambda v: len(v.strip()) >= 5,
             ),
             Slot(
                 name="category",

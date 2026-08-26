@@ -19,7 +19,7 @@ class TestimonialBase(BaseModel):
     phone: Optional[str] = Field(default=None, max_length=50)
     location: Optional[str] = Field(default=None, max_length=255)
     title: Optional[str] = Field(default=None, max_length=255)
-    content: str = Field(min_length=50, max_length=5000)
+    content: str = Field(min_length=5, max_length=5000)
     category: str = Field(
         default="general",
         pattern="^(healing|salvation|provision|deliverance|general|Prayer|General)$"

@@ -37,18 +37,12 @@ FIELD_PROMPTS: dict[str, dict[str, str]] = {
         "am": "አስደናቂ ነው! ለምስክርነትዎ ምን ርዕስ ይሰጡታል? (ለማቆም 'skip' ብለው ይጻፉ።)",
     },
     "testimony_content": {
-        "en": (
-            "Please share your testimony in detail. "
-            "What did God do for you? (at least 50 characters)"
-        ),
-        "am": "እባክዎ ምስክርነትዎን በዝርዝር ያካፍሉን። እግዚአብሔር ምን አደረገልዎ? (ቢያንስ 50 ፊደላት)",
+        "en": "Please share your testimony. What did God do for you?",
+        "am": "እባክዎ ምስክርነትዎን ያካፍሉን። እግዚአብሔር ምን አደረገልዎ?",
     },
     "testimony_content_too_short": {
-        "en": (
-            "Your testimony is a bit short. Please share at least 50 characters "
-            "so we can fully capture your story. 🙏"
-        ),
-        "am": "ምስክርነትዎ አጭር ነው። ታሪክዎን ሙሉ ለሙሉ ለመያዝ ቢያንስ 50 ፊደላት ያካፍሉን። 🙏",
+        "en": "Please share a little more about what God did for you. 🙏",
+        "am": "እባክዎ እግዚአብሔር ስለ አደረጉልዎ ትንሽ ተጨማሪ ያካፍሉን። 🙏",
     },
     "testimony_category": {
         "en": (
