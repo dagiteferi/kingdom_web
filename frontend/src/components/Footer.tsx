@@ -152,7 +152,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://www.facebook.com/profile.php?id=61590871134922"
+                href="https://www.facebook.com/share/1CvWgxJYn2/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-primary-foreground/10 rounded-lg hover:bg-secondary hover:text-secondary-foreground transition-all duration-200"
