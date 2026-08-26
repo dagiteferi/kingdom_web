@@ -5,8 +5,10 @@ Builds the final LLM response by combining the language-specific system
 prompt, conversation history, and optional RAG context, then calls Groq
 ``groq/compound`` and appends the result to ``state["messages"]``.
 
-Uses exponential-backoff retry on 429 rate-limit errors to handle burst
-traffic gracefully without crashing.
+For action flows (testimony/prayer/partnership), when the last message is
+already an AIMessage prompt from the flow/confirmation/submission nodes,
+the LLM call is skipped entirely so the bot reliably asks the next slot
+question without the LLM overriding it.
 
 References
 ----------
@@ -21,7 +23,7 @@ import asyncio
 import logging
 
 from groq import RateLimitError
-from langchain_core.messages import AIMessage, BaseMessage, SystemMessage
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from langchain_groq import ChatGroq
 
 from app.chatbot.prompts import load_system_prompt
@@ -49,20 +51,6 @@ def _trim_trailing_ai_messages(messages: list[BaseMessage]) -> list[BaseMessage]
     """
     Remove any trailing AIMessages from *messages* so the list always ends
     with a HumanMessage before being sent to the LLM.
-
-    LLM APIs require the last message to have role ``"user"``.  Flow and
-    confirmation nodes can append ``AIMessage`` prompts to state before the
-    formatter runs, which would otherwise trigger a 400 error.
-
-    Parameters
-    ----------
-    messages:
-        The full conversation history from ``state["messages"]``.
-
-    Returns
-    -------
-    list[BaseMessage]
-        A copy of *messages* with any trailing ``AIMessage`` entries removed.
     """
     trimmed = list(messages)
     while trimmed and isinstance(trimmed[-1], AIMessage):
@@ -70,24 +58,26 @@ def _trim_trailing_ai_messages(messages: list[BaseMessage]) -> list[BaseMessage]
     return trimmed
 
 
+def _last_message_is_flow_prompt(messages: list[BaseMessage]) -> bool:
+    """
+    Return True if the last message in *messages* is an AIMessage that was
+    appended by a flow/confirmation/submission node (not by the formatter).
+
+    When this is True the formatter should skip the LLM call and return the
+    message as-is, so slot questions and confirmation prompts are delivered
+    exactly as written rather than being overridden by the LLM.
+    """
+    if not messages:
+        return False
+    last = messages[-1]
+    # If the last message is already an AI message (appended by flow/confirm/
+    # submission/fallback nodes), there is no need to call the LLM again.
+    return isinstance(last, AIMessage)
+
+
 async def _invoke_with_retry(llm_messages: list[BaseMessage]) -> str:
     """
     Invoke the LLM, retrying with exponential backoff on 429 rate-limit errors.
-
-    Parameters
-    ----------
-    llm_messages:
-        The full message list to send to the LLM (system + history).
-
-    Returns
-    -------
-    str
-        The response content from the LLM.
-
-    Raises
-    ------
-    RateLimitError
-        If all retries are exhausted.
     """
     last_exc: Exception | None = None
 
@@ -109,15 +99,17 @@ async def _invoke_with_retry(llm_messages: list[BaseMessage]) -> str:
 
 async def response_formatter_node(state: AgentState) -> AgentState:
     """
-    LangGraph node: generate the final assistant response via Groq.
+    LangGraph node: deliver the final assistant response.
 
-    The node:
-    1. Loads the language-appropriate system prompt.
-    2. Optionally prepends a ``[Context]`` block if RAG results are present.
-    3. Strips any trailing AIMessages from the history so the LLM always
-       receives a conversation ending with a user message (API requirement).
-    4. Invokes Groq with exponential-backoff retry on 429 rate-limit errors.
-    5. Appends the complete ``AIMessage`` to ``state["messages"]``.
+    **For action flows** (testimony / prayer / partnership):
+    If the last message is already an AIMessage (slot prompt, confirmation
+    summary, or submission result appended by another node), the LLM call is
+    skipped and that message is returned directly.  This ensures the bot asks
+    slot questions reliably without the LLM overriding them.
+
+    **For QA / fallback / post-confirmation**:
+    Calls Groq with the full conversation history (system prompt + messages)
+    and appends the response as a new AIMessage.
 
     Parameters
     ----------
@@ -127,12 +119,24 @@ async def response_formatter_node(state: AgentState) -> AgentState:
     Returns
     -------
     AgentState
-        Updated state with the new assistant message appended.
+        Updated state with the assistant response in ``messages``.
     """
+    messages = list(state.get("messages", []))
+
+    # ------------------------------------------------------------------
+    # Fast path: flow/confirmation/submission already appended a prompt.
+    # Skip the LLM and return it directly.
+    # ------------------------------------------------------------------
+    if _last_message_is_flow_prompt(messages):
+        logger.debug("response_formatter: skipping LLM — flow prompt already present")
+        return {**state, "messages": messages}
+
+    # ------------------------------------------------------------------
+    # Slow path: need LLM response (QA, fallback, post-submit thanks, etc.)
+    # ------------------------------------------------------------------
     language = state.get("language", "en")
     system_prompt_text = load_system_prompt(language)  # type: ignore[arg-type]
 
-    # Build the system message, optionally including retrieved context
     retrieved_context = state.get("retrieved_context") or ""
     if retrieved_context:
         system_content = (
@@ -144,15 +148,13 @@ async def response_formatter_node(state: AgentState) -> AgentState:
 
     system_message = SystemMessage(content=system_content)
 
-    # Strip trailing AIMessages so the LLM always receives a conversation
-    # that ends with a user message (API requirement).
-    history_for_llm = _trim_trailing_ai_messages(list(state["messages"]))
+    # Strip trailing AIMessages so the LLM receives a conversation ending
+    # with a user message (API requirement).
+    history_for_llm = _trim_trailing_ai_messages(messages)
 
-    # Compose the full message list for the LLM
     llm_messages = [system_message] + history_for_llm
 
-    # Invoke with retry on rate-limit errors
     content = await _invoke_with_retry(llm_messages)
 
-    new_messages = list(state["messages"]) + [AIMessage(content=content)]
+    new_messages = messages + [AIMessage(content=content)]
     return {**state, "messages": new_messages}
