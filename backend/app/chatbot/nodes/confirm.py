@@ -66,6 +66,10 @@ async def confirmation_node(state: AgentState) -> AgentState:
     subsequent calls to :func:`confirm_decision_router` can inspect the last
     user reply.
 
+    If ``flow_step`` is already ``"awaiting_confirm"``, the user has replied
+    to a previous summary — skip re-printing it and pass through unchanged so
+    ``confirm_decision_router`` can dispatch to submission or cancellation.
+
     Parameters
     ----------
     state:
@@ -76,6 +80,15 @@ async def confirmation_node(state: AgentState) -> AgentState:
     AgentState
         State with updated ``messages`` and ``flow_step``.
     """
+    # Already waiting for a confirm/cancel reply — don't re-print the summary.
+    # confirm_decision_router will handle the routing based on the user's reply.
+    if state.get("flow_step") == "awaiting_confirm":
+        logger.debug(
+            "confirmation_node: already awaiting_confirm — passing through",
+            flow=state.get("flow"),
+        )
+        return state
+
     language: str = state.get("language", "en")
     collected_fields: dict = state.get("collected_fields") or {}
     messages = list(state.get("messages") or [])

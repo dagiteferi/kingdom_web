@@ -72,6 +72,10 @@ def _action_flow_router(state: AgentState) -> str:
     """
     Conditional edge function: decide whether to confirm or continue prompting.
 
+    If ``state["flow_step"] == "awaiting_confirm"``, the user already saw the
+    summary and has just replied — route back to confirmation so
+    ``confirm_decision_router`` can dispatch to submission or cancellation.
+
     If ``state["missing_fields"]`` is empty (all slots collected) the graph
     moves to confirmation; otherwise it goes to the response formatter to
     prompt for the next missing field.
@@ -81,6 +85,11 @@ def _action_flow_router(state: AgentState) -> str:
     str
         ``"confirmation"`` or ``"response_formatter"``.
     """
+    # User replied to the confirmation prompt — re-enter confirmation so
+    # confirm_decision_router can dispatch to submission / cancellation.
+    if state.get("flow_step") == "awaiting_confirm":
+        return "confirmation"
+
     missing = state.get("missing_fields") or []
     return "confirmation" if not missing else "response_formatter"
 
