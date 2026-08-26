@@ -3,7 +3,11 @@ Heaven on Earth CMS Backend — Response Formatter Node
 
 Builds the final LLM response by combining the language-specific system
 prompt, conversation history, and optional RAG context, then calls Groq
-``llama3-70b-8192`` and appends the result to ``state["messages"]``.
+and appends the result to ``state["messages"]``.
+
+Uses ``llama-3.1-8b-instant`` as primary (high TPM limit) with
+``llama3-70b-8192`` as fallback, and exponential-backoff retry on 429
+rate-limit errors.
 
 References
 ----------
@@ -14,6 +18,10 @@ References
 
 from __future__ import annotations
 
+import asyncio
+import logging
+
+from groq import RateLimitError
 from langchain_core.messages import AIMessage, BaseMessage, SystemMessage
 from langchain_groq import ChatGroq
 
@@ -21,14 +29,29 @@ from app.chatbot.prompts import load_system_prompt
 from app.chatbot.session import AgentState
 from app.config import settings
 
+logger = logging.getLogger(__name__)
+
 # ---------------------------------------------------------------------------
-# Module-level Groq client — instantiated once, reused across all invocations
+# Groq clients — primary (high TPM) + fallback (lower TPM but more capable)
 # ---------------------------------------------------------------------------
-_llm = ChatGroq(
-    model="groq/compound",
+
+# llama-3.1-8b-instant: ~1M TPM on free tier — handles most requests easily
+_llm_primary = ChatGroq(
+    model="llama-3.1-8b-instant",
     api_key=settings.groq_api_key,
     temperature=0.7,
 )
+
+# llama3-70b-8192: fallback when primary is also rate-limited
+_llm_fallback = ChatGroq(
+    model="llama3-70b-8192",
+    api_key=settings.groq_api_key,
+    temperature=0.7,
+)
+
+# Retry settings
+_MAX_RETRIES = 3
+_BASE_BACKOFF = 2.0  # seconds
 
 
 def _trim_trailing_ai_messages(messages: list[BaseMessage]) -> list[BaseMessage]:
@@ -36,25 +59,46 @@ def _trim_trailing_ai_messages(messages: list[BaseMessage]) -> list[BaseMessage]
     Remove any trailing AIMessages from *messages* so the list always ends
     with a HumanMessage before being sent to the LLM.
 
-    LLM APIs (OpenAI, Groq, Anthropic, etc.) require the last message in the
-    conversation to have role ``"user"``.  Flow and confirmation nodes can
-    append ``AIMessage`` prompts to state *before* the formatter runs, which
-    would otherwise trigger a 400 "last message role must be 'user'" error.
-
-    Parameters
-    ----------
-    messages:
-        The full conversation history from ``state["messages"]``.
-
-    Returns
-    -------
-    list[BaseMessage]
-        A copy of *messages* with any trailing ``AIMessage`` entries removed.
+    LLM APIs require the last message to have role ``"user"``.  Flow and
+    confirmation nodes can append ``AIMessage`` prompts to state before the
+    formatter runs, which would otherwise trigger a 400 error.
     """
     trimmed = list(messages)
     while trimmed and isinstance(trimmed[-1], AIMessage):
         trimmed.pop()
     return trimmed
+
+
+async def _invoke_with_retry(llm_messages: list[BaseMessage]) -> str:
+    """
+    Attempt to invoke the primary LLM, retrying on 429 with exponential
+    backoff.  Falls back to the secondary model if the primary is exhausted.
+
+    Returns the response content string.
+    """
+    last_exc: Exception | None = None
+
+    for attempt in range(_MAX_RETRIES):
+        try:
+            response = await _llm_primary.ainvoke(llm_messages)
+            return str(response.content)
+        except RateLimitError as exc:
+            last_exc = exc
+            wait = _BASE_BACKOFF * (2 ** attempt)
+            logger.warning(
+                "Groq primary rate limit hit (attempt %d/%d), waiting %.1fs",
+                attempt + 1, _MAX_RETRIES, wait,
+            )
+            await asyncio.sleep(wait)
+
+    # Primary exhausted — try fallback model once
+    logger.warning("Primary model rate-limited after %d retries, trying fallback", _MAX_RETRIES)
+    try:
+        response = await _llm_fallback.ainvoke(llm_messages)
+        return str(response.content)
+    except RateLimitError as exc:
+        logger.error("Fallback model also rate-limited: %s", exc)
+        raise exc from last_exc
 
 
 async def response_formatter_node(state: AgentState) -> AgentState:
@@ -65,10 +109,8 @@ async def response_formatter_node(state: AgentState) -> AgentState:
     1. Loads the language-appropriate system prompt.
     2. Optionally prepends a ``[Context]`` block if RAG results are present.
     3. Strips any trailing AIMessages from the history so the LLM always
-       receives a conversation ending with a user message (required by the
-       Groq / OpenAI API).
-    4. Invokes Groq with ``ainvoke`` (non-streaming; streaming is handled at
-       the WebSocket layer).
+       receives a conversation ending with a user message (API requirement).
+    4. Invokes Groq with retry + fallback on 429 rate-limit errors.
     5. Appends the complete ``AIMessage`` to ``state["messages"]``.
 
     Parameters
@@ -103,8 +145,8 @@ async def response_formatter_node(state: AgentState) -> AgentState:
     # Compose the full message list for the LLM
     llm_messages = [system_message] + history_for_llm
 
-    # Call Groq — non-streaming (streaming handled at WebSocket layer)
-    response = await _llm.ainvoke(llm_messages)
+    # Invoke with retry + fallback on rate-limit errors
+    content = await _invoke_with_retry(llm_messages)
 
-    new_messages = list(state["messages"]) + [AIMessage(content=response.content)]
+    new_messages = list(state["messages"]) + [AIMessage(content=content)]
     return {**state, "messages": new_messages}
