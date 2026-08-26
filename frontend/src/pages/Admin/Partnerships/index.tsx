@@ -30,6 +30,7 @@ interface Partnership {
     phone: string;
     partnership_type: string;
     status: string;
+    source: string;
     created_at: string;
     message?: string;
 }
@@ -106,6 +107,7 @@ export default function AdminPartnerships() {
                             <TableRow>
                                 <TableHead>Applicant</TableHead>
                                 <TableHead>Type</TableHead>
+                                <TableHead>Source</TableHead>
                                 <TableHead>Date</TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
@@ -122,6 +124,11 @@ export default function AdminPartnerships() {
                                             </div>
                                         </TableCell>
                                         <TableCell className="capitalize">{p.partnership_type}</TableCell>
+                                        <TableCell>
+                                            <Badge variant="outline" className={p.source === "chatbot" ? "bg-purple-100 text-purple-800 border-purple-200" : "bg-blue-100 text-blue-800 border-blue-200"}>
+                                                {p.source === "chatbot" ? "🤖 AI Chatbot" : "📝 Form"}
+                                            </Badge>
+                                        </TableCell>
                                         <TableCell>{format(new Date(p.created_at), "MMM d, yyyy")}</TableCell>
                                         <TableCell>
                                             <Badge variant={p.status === 'active' ? 'default' : 'secondary'}
@@ -179,6 +186,12 @@ export default function AdminPartnerships() {
                                         <Phone className="w-4 h-4 text-gray-400" />
                                         <p>{selectedPartnership.phone}</p>
                                     </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <Label className="text-muted-foreground">Submitted Via</Label>
+                                    <Badge variant="outline" className={selectedPartnership.source === "chatbot" ? "bg-purple-100 text-purple-800 border-purple-200" : "bg-blue-100 text-blue-800 border-blue-200"}>
+                                        {selectedPartnership.source === "chatbot" ? "🤖 AI Chatbot" : "📝 Form"}
+                                    </Badge>
                                 </div>
                             </div>
 

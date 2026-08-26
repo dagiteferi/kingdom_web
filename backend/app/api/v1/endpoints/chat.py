@@ -150,25 +150,24 @@ async def websocket_chat(websocket: WebSocket, session_id: str) -> None:
             final_state: AgentState = state
 
             try:
-                async for chunk in chatbot_graph.astream(state):
-                    # Each chunk is a dict of node_name → updated_state
-                    for node_name, node_state in chunk.items():
-                        final_state = node_state
-                        # Stream any new AIMessage content — never HumanMessage
-                        messages = node_state.get("messages", [])
-                        if messages:
-                            last = messages[-1]
-                            # Only stream content from AIMessage, not HumanMessage
-                            if isinstance(last, AIMessage):
-                                content = getattr(last, "content", "")
-                                if content and content != full_response:
-                                    delta = content[len(full_response):]
-                                    if delta:
-                                        full_response = content
-                                        await websocket.send_json({
-                                            "message": delta,
-                                            "is_final": False,
-                                        })
+                # Use ainvoke to get correct final merged state, then stream
+                # the response text character by character from the last AIMessage.
+                # astream gives partial node states which can lose flow_step/flow
+                # fields when confirmation_node runs before response_formatter.
+                final_state = await chatbot_graph.ainvoke(state)
+
+                # Extract the last AIMessage as the response
+                from langchain_core.messages import AIMessage as _AIMsg
+                all_msgs = final_state.get("messages", [])
+                for msg in reversed(all_msgs):
+                    if isinstance(msg, _AIMsg):
+                        full_response = str(msg.content)
+                        # Send as a single non-streaming frame
+                        await websocket.send_json({
+                            "message": full_response,
+                            "is_final": False,
+                        })
+                        break
 
             except Exception as exc:
                 logger.error("ws_agent_error", error=str(exc), session_id=session_id)

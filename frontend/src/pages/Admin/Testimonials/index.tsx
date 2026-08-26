@@ -32,6 +32,7 @@ interface Testimonial {
     category: string;
     status: "pending" | "approved" | "rejected" | "published";
     is_featured: boolean;
+    source: string;
     created_at: string;
 }
 
@@ -132,6 +133,7 @@ export default function AdminTestimonials() {
                             <TableRow>
                                 <TableHead>Name</TableHead>
                                 <TableHead>Category</TableHead>
+                                <TableHead>Source</TableHead>
                                 <TableHead>Date</TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead>Featured</TableHead>
@@ -144,6 +146,11 @@ export default function AdminTestimonials() {
                                     <TableRow key={t.id}>
                                         <TableCell className="font-medium">{t.name}</TableCell>
                                         <TableCell>{t.category}</TableCell>
+                                        <TableCell>
+                                            <Badge variant="outline" className={t.source === "chatbot" ? "bg-purple-100 text-purple-800 border-purple-200" : "bg-blue-100 text-blue-800 border-blue-200"}>
+                                                {t.source === "chatbot" ? "🤖 AI Chatbot" : "📝 Form"}
+                                            </Badge>
+                                        </TableCell>
                                         <TableCell>{t.created_at ? format(new Date(t.created_at), "MMM d, yyyy") : "N/A"}</TableCell>
                                         <TableCell>
                                             <Badge variant="outline" className={getStatusColor(t.status)}>
@@ -195,7 +202,12 @@ export default function AdminTestimonials() {
                             <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                                 <div className="flex justify-between text-sm text-muted-foreground">
                                     <span>{selectedTestimonial.name}</span>
-                                    <span>{selectedTestimonial.category}</span>
+                                    <div className="flex items-center gap-2">
+                                        <span>{selectedTestimonial.category}</span>
+                                        <Badge variant="outline" className={selectedTestimonial.source === "chatbot" ? "bg-purple-100 text-purple-800 border-purple-200" : "bg-blue-100 text-blue-800 border-blue-200"}>
+                                            {selectedTestimonial.source === "chatbot" ? "🤖 AI Chatbot" : "📝 Form"}
+                                        </Badge>
+                                    </div>
                                 </div>
                                 <p className="text-gray-800 italic">"{selectedTestimonial.content}"</p>
                             </div>

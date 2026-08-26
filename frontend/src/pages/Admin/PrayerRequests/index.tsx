@@ -35,6 +35,7 @@ interface PrayerRequest {
     is_public: boolean;
     status: string;
     prayer_count: number;
+    source: string;
     created_at: string;
     response_message?: string;
 }
@@ -143,6 +144,7 @@ export default function AdminPrayerRequests() {
                             <TableRow>
                                 <TableHead>Request</TableHead>
                                 <TableHead>Submitted By</TableHead>
+                                <TableHead>Source</TableHead>
                                 <TableHead>Date</TableHead>
                                 <TableHead>Prayers</TableHead>
                                 <TableHead>Status</TableHead>
@@ -163,6 +165,11 @@ export default function AdminPrayerRequests() {
                                             ) : (
                                                 <span>{r.name}</span>
                                             )}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant="outline" className={r.source === "chatbot" ? "bg-purple-100 text-purple-800 border-purple-200" : "bg-blue-100 text-blue-800 border-blue-200"}>
+                                                {r.source === "chatbot" ? "🤖 AI Chatbot" : "📝 Form"}
+                                            </Badge>
                                         </TableCell>
                                         <TableCell>{format(new Date(r.created_at), "MMM d, yyyy")}</TableCell>
                                         <TableCell>
@@ -217,7 +224,12 @@ export default function AdminPrayerRequests() {
                                     <span>
                                         {selectedRequest.is_anonymous ? "Anonymous" : selectedRequest.name}
                                     </span>
-                                    <span>{format(new Date(selectedRequest.created_at), "PPP")}</span>
+                                    <div className="flex items-center gap-2">
+                                        <Badge variant="outline" className={selectedRequest.source === "chatbot" ? "bg-purple-100 text-purple-800 border-purple-200" : "bg-blue-100 text-blue-800 border-blue-200"}>
+                                            {selectedRequest.source === "chatbot" ? "🤖 AI Chatbot" : "📝 Form"}
+                                        </Badge>
+                                        <span>{format(new Date(selectedRequest.created_at), "PPP")}</span>
+                                    </div>
                                 </div>
                                 <p className="text-gray-800 text-lg">{selectedRequest.request}</p>
 
