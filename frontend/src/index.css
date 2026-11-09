@@ -118,10 +118,7 @@
     @apply font-heading font-semibold tracking-tight;
   }
 
-  /* RTL Support for Amharic */
-  [dir="rtl"] {
-    font-family: 'Poppins', 'Nyala', sans-serif;
-  }
+  /* TODO: re-add RTL/Amharic font support when Amharic language is re-enabled */
 }
 
 @layer components {

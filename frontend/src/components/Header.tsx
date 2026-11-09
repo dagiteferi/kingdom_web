@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '@/assets/logo.png';
-import LanguageSwitcher from './LanguageSwitcher';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -66,10 +65,8 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Language Switcher & Mobile Menu Button */}
+          {/* Language Switcher hidden until Amharic is re-added */}
           <div className="flex items-center gap-3">
-            <LanguageSwitcher />
-            
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden p-2 text-foreground hover:text-secondary transition-colors"

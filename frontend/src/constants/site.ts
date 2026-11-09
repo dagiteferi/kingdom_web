@@ -5,7 +5,7 @@ export const SITE = {
   url: 'https://heavenonearthministries.org',
   author: 'Heaven on Earth Ministries',
   defaultLocale: 'en',
-  locales: ['en', 'am'], // English and Amharic
+  locales: ['en'], // TODO: re-add 'am' (Amharic) when ready
 } as const;
 
 // Navigation links

@@ -29,7 +29,6 @@ import { EventTableSkeleton } from "./TableSkeleton";
 interface Event {
     id: string;
     title: string;
-    title_am?: string;
     description: string;
     event_date: string;
     start_time: string;
@@ -217,14 +216,6 @@ export default function AdminEvents() {
                                         value={formData.title || ""}
                                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                         required
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="title_am">Title (Amharic)</Label>
-                                    <Input
-                                        id="title_am"
-                                        value={formData.title_am || ""}
-                                        onChange={(e) => setFormData({ ...formData, title_am: e.target.value })}
                                     />
                                 </div>
                             </div>

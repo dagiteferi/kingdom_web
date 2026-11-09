@@ -28,7 +28,6 @@ import { GalleryTableSkeleton } from "./TableSkeleton";
 interface GalleryItem {
     id: string;
     title: string;
-    title_am?: string;
     category: string;
     media_type: "image" | "video";
     src_url: string;
@@ -117,7 +116,6 @@ export default function AdminGallery() {
                     }
                     const submitData = new FormData();
                     submitData.append("title", formData.title || "");
-                    if (formData.title_am) submitData.append("title_am", formData.title_am);
                     if (formData.description) submitData.append("description", formData.description);
                     submitData.append("alt_text", formData.title || "Gallery image");
                     submitData.append("media_type", formData.media_type || "image");
